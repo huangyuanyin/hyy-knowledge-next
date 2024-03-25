@@ -13,5 +13,5 @@ module.exports = {
   "proseWrap": "preserve", // 按照文件原样折行
   "htmlWhitespaceSensitivity": "ignore", // html文件的空格敏感度，控制空格是否影响布局
   "endOfLine": "auto", // 结尾是 \n \r \n\r auto
-  "printWidth": 100 // 指定代码长度，超出换行
+  "printWidth": 140 // 指定代码长度，超出换行
 }
