@@ -1,5 +1,12 @@
+import { Button } from '@/components/ui/button'
+
 const DashboardPage = () => {
-  return <div>DashboardPage</div>
+  return (
+    <>
+      <Button>Click me</Button>
+      <div>DashboardPage</div>
+    </>
+  )
 }
 
 export default DashboardPage
