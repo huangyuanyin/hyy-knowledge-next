@@ -6,7 +6,7 @@ const PageContainer = () => {
   return (
     <>
       <ResizablePanelGroup direction="horizontal" className="max-w-[100vw] rounded-lg">
-        <ResizablePanel defaultSize={10} maxSize={15}>
+        <ResizablePanel defaultSize={11} maxSize={15} minSize={9}>
           <Sidebar />
         </ResizablePanel>
         <ResizableHandle withHandle />
