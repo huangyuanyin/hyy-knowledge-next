@@ -13,6 +13,7 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-slot": "^1.0.2",
+    "@tinymce/tinymce-react": "^5.0.0",
     "antd": "^5.15.3",
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
@@ -25,7 +26,8 @@
     "react-resizable-panels": "^2.0.16",
     "shadcn-ui": "^0.8.0",
     "tailwind-merge": "^2.2.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "tinymce": "^6.8.3"
   },
   "devDependencies": {
     "@types/node": "^20",
