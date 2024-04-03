@@ -1,0 +1,195 @@
+.TinyMCE_wrap {
+  z-index: 999999999;
+  position: relative;
+  .tox-tinymce {
+    border: none;
+    border-radius: 0px;
+    height: calc(100vh - 55px) !important;
+    .tox-editor-header {
+      padding: 0 !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04) !important;
+      box-shadow: none !important;
+      display: flex !important;
+      align-items: center !important;
+      flex-wrap: wrap !important;
+      .tox-toolbar {
+        background-size: 0 !important;
+        .tox-toolbar__group {
+          position: relative !important;
+          height: 42px !important;
+          &::after {
+            content: '' !important;
+            position: absolute !important;
+            top: 25% !important;
+            right: 0 !important;
+            width: 1px !important;
+            height: 50% !important;
+            background-color: #f4f5f5 !important;
+          }
+        }
+        .tox-tbtn {
+          cursor: pointer !important;
+          border-radius: 6px !important;
+          span {
+            cursor: pointer !important;
+          }
+          &:hover {
+            background-color: #f4f5f5 !important;
+          }
+        }
+        .tox-split-button {
+          cursor: pointer !important;
+          border-radius: 6px !important;
+          &:hover {
+            box-shadow: none !important;
+            background-color: #f4f5f5 !important;
+            .tox-tbtn svg {
+              fill: #222f3e !important;
+            }
+          }
+        }
+      }
+    }
+    .tox-sidebar-wrap {
+      box-sizing: border-box !important;
+    }
+    :deep(.mce-toc) {
+      position: absolute !important;
+      right: 8% !important;
+      min-width: 250px !important;
+      h2 {
+        font-size: 14px !important;
+      }
+    }
+  }
+}
+
+.active {
+  font-weight: 600 !important;
+}
+.outside-btn {
+  display: none;
+  right: 10px;
+  position: absolute;
+  top: 50px;
+  overflow-y: auto;
+  padding: 10px;
+}
+.outside-toc {
+  position: absolute;
+  top: 101px;
+  right: 15px;
+  width: 300px;
+  height: calc(100% - 140px);
+  overflow-y: auto;
+  padding: 10px;
+  z-index: 200;
+  background: #fff;
+}
+
+#outside-toc {
+  h2 {
+    font-size: 14px;
+    margin-bottom: 12px;
+    padding-top: 32px;
+    padding-left: 28px;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    flex-shrink: 0;
+    margin-right: 8px;
+    color: #262626;
+  }
+}
+#outside-toc {
+  ul > div {
+    line-height: 25px;
+    border-left: 2px solid #eff0f0;
+    margin-left: -5px;
+    li {
+      list-style-type: none; /* 去除默认点 */
+      font-size: 14px;
+      font-weight: 260;
+      overflow: hidden;
+      width: 80%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      a {
+        text-decoration: none;
+        cursor: pointer;
+      }
+    }
+  }
+}
+.outside-toc {
+  ul > li {
+    .active {
+      color: red;
+    }
+  }
+}
+.tox-edit-area__iframe {
+  :deep(.mce-content-body) {
+    background-color: red !important;
+  }
+  .mce-toc {
+    position: absolute !important;
+    right: 8%;
+    min-width: 250px;
+    h2 {
+      font-size: 14px;
+    }
+  }
+}
+
+.mce-content-body {
+  background-color: red !important;
+}
+.level-1 {
+  padding-left: 5%;
+}
+.level-2 {
+  padding-left: 10%;
+  margin-left: -2px;
+}
+.level-3 {
+  padding-left: 15%;
+}
+.level-4 {
+  padding-left: 20%;
+}
+.level-5 {
+  padding-left: 25%;
+}
+.level-6 {
+  padding-left: 30%;
+}
+.activeBorderLeft {
+  border-left: 3px solid #00b96b !important;
+}
+.activeBorderBottom {
+  border-left: 0px solid #00b96b !important;
+  border-bottom: 2px solid #00b96b !important;
+}
+.my-custom-li-class {
+  position: fixed;
+  top: 100px;
+}
+.your-class-name {
+  display: flex;
+  flex-direction: column; /* 垂直布局 */
+  align-items: flex-end; /* 元素居右对齐 */
+}
+.outside-toc::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条 */
+}
+#show {
+  display: none;
+  margin-left: 10px;
+}
+#button {
+  margin-left: 10px;
+}
+.outside-toc {
+  scrollbar-width: none;
+}
