@@ -12,6 +12,7 @@ type IFrameType = 'sheet' | 'mindmap' | 'ppt' | 'file' | 'doc'
 const iframeUrl: Record<IFrameType, { src: string; opera?: string }> = {
   sheet: {
     src: process.env.NEXT_PUBLIC_BASE_SHEET_URL!,
+    opera: 'getSheetData',
   },
   mindmap: {
     src: process.env.NEXT_PUBLIC_BASE_MINDMAP_URL!,
@@ -58,7 +59,7 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   }, [docValue.current, type])
 
   const judegeType = () => {
-    if (['mindmap', 'ppt'].includes(type)) {
+    if (['sheet', 'mindmap', 'ppt'].includes(type)) {
       setIframeSrc(`${iframeUrl[type].src}?time=${Date.now()}`)
     } else if (type === 'file') {
       const url = 'http://10.4.150.56:8012/onlinePreview?url=' + encodeURIComponent(Base64.encode(docValue.current))
@@ -97,12 +98,7 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
       const { code, data, msg } = res
       if (code === 1000) {
         docValue.current = data.body
-        console.log(docValue.current)
         if (type === 'file') return judegeType()
-        if (type === 'sheet') {
-          sessionStorage.setItem('getSheetData', docValue.current)
-          return setIframeSrc(`${process.env.NEXT_PUBLIC_BASE_SHEET_URL}?time=${Date.now()}`)
-        }
         sendMessageToIframe()
       } else {
         messageApi.error(msg)
@@ -116,7 +112,8 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   const sendMessageToIframe = () => {
     if (shareIframe.current) {
       shareIframe.current.onload = () => {
-        shareIframe.current!.contentWindow!.postMessage({ type: iframeUrl[type].opera, data: docValue.current, isPreview: true }, '*')
+        const data = type === 'sheet' ? JSON.parse(docValue.current) : docValue.current
+        shareIframe.current!.contentWindow!.postMessage({ type: iframeUrl[type].opera, data, isPreview: true }, '*')
       }
     }
   }
