@@ -1,7 +1,8 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+
+import { use, useEffect, useRef } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
-import './doc.css'
+import './tinymce.css'
 
 const initOptions = {
   skin_url: '/tinymce/skins/ui/oxide',
@@ -135,50 +136,26 @@ const initOptions = {
       editor.execCommand('mceInsertOrUpdateToc')
     })
     editor.on('init', () => {
-      console.log(111)
       editor.execCommand('mceInsertOrUpdateToc')
     })
   },
 }
 
-export default function DocSharePage() {
-  const sid = '5608'
+export default function Tinymce(props: { value: string }) {
+  const { value } = props
   const editorRef = useRef<any>(null)
-  const [docValue, setDocValue] = useState('')
 
   useEffect(() => {
-    const getArticleDetail = async () => {
-      try {
-        const response = await fetch(`http://10.4.150.56:8029/public_data/${sid}/`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        if (!response.ok) {
-          throw new Error('网络请求失败')
-        }
-        const res = await response.json()
-        const { code, data } = res
-        if (code === 1000) {
-          console.log(111)
-          setDocValue(data.body)
-        } else {
-          // 处理错误情况
-        }
-      } catch (error) {
-        console.error('获取文章详情时出错:', error)
-      }
+    console.log('1212', props.value)
+    if (editorRef.current && props.value) {
+      editorRef.current.setContent(props.value)
     }
-
-    getArticleDetail()
-  }, [sid])
+  }, [props.value])
 
   const handleEditorInit = (evt: any, editor: any) => {
-    console.log(evt, editor)
     editorRef.current = editor
-    if (docValue) {
-      editorRef.current.setContent(docValue)
+    if (value) {
+      editorRef.current.setContent(value)
     }
   }
 
@@ -188,7 +165,7 @@ export default function DocSharePage() {
         <Editor
           tinymceScriptSrc={'http://localhost:3001/tinymce/tinymce.min.js'}
           onInit={handleEditorInit}
-          value={docValue}
+          value={value}
           init={initOptions as any}
           disabled={true}
         />
