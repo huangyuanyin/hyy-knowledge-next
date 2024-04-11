@@ -7,7 +7,7 @@ import mainIcon from '@/assets/favicon.ico'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { UserLoginForm } from '@/app/_components/form/user-login-form'
 import Link from 'next/link'
-import { ChangeTheme } from '@/components/change-theme'
+// import { ChangeTheme } from '@/components/change-theme'
 
 export default function Header() {
   const query = useSearchParams().get('query')

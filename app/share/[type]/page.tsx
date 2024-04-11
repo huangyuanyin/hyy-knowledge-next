@@ -5,18 +5,16 @@ import { Base64 } from 'js-base64'
 import { message } from 'antd'
 import Tinymce from '@/app/_components/tinymce/tinymce'
 import { base64UrlDecode } from '@/utils/encrypt'
-import { Query } from '@/type/index'
+import { ContentType, Query } from '@/type/index'
 import Loading from '@/components/loading'
-import { getDocList } from './action'
+import { getArticleDetail } from './action'
 
-type IFrameType = 'sheet' | 'mindmap' | 'ppt' | 'file' | 'doc'
-
-const iframeUrl: Record<IFrameType, { src: string; opera?: string }> = {
+const iframeUrl: Record<ContentType, { src: string; opera?: string }> = {
   sheet: {
     src: process.env.NEXT_PUBLIC_BASE_SHEET_URL!,
     opera: 'getSheetData',
   },
-  mindmap: {
+  mind: {
     src: process.env.NEXT_PUBLIC_BASE_MINDMAP_URL!,
     opera: 'getData',
   },
@@ -32,7 +30,7 @@ const iframeUrl: Record<IFrameType, { src: string; opera?: string }> = {
   },
 }
 
-export default function DocSharePage({ params, searchParams }: { params: { type: IFrameType }; searchParams: { query: string } }) {
+export default function DocSharePage({ params, searchParams }: { params: { type: ContentType }; searchParams: { query: string } }) {
   const [messageApi, contextHolder] = message.useMessage()
   const { type } = params
   const docValue = useRef<string>('')
@@ -53,16 +51,6 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   useEffect(() => {
     if (query.aid) {
       getArticle()
-      // 异步执行getDocList并更新状态
-      ;(async () => {
-        try {
-          const doc = await getDocList(Number(query.aid)) // 调用异步函数
-          console.log(doc)
-        } catch (error) {
-          console.error('Error fetching document list:', error)
-          // 这里可以添加错误处理逻辑，比如设置错误状态或显示错误信息
-        }
-      })()
     }
   }, [query.aid, type])
 
@@ -71,7 +59,7 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   }, [docValue.current, type])
 
   const judegeType = () => {
-    if (['sheet', 'mindmap', 'ppt'].includes(type)) {
+    if (['sheet', 'mind', 'ppt'].includes(type)) {
       setIframeSrc(`${iframeUrl[type].src}?time=${Date.now()}`)
     } else if (type === 'file') {
       const url = 'http://10.4.150.56:8012/onlinePreview?url=' + encodeURIComponent(Base64.encode(docValue.current))
@@ -115,10 +103,10 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
       // } else {
       //   messageApi.error(msg)
       // }
-      const doc = await getDocList(Number(query.aid))
+      const res = await getArticleDetail(type, Number(query.aid))
       setIsLoading(false)
-      if (doc) {
-        docValue.current = doc.body
+      if (res) {
+        docValue.current = res.body
         if (type === 'file') return judegeType()
         sendMessageToIframe()
       }
