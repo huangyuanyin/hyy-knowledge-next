@@ -144,9 +144,9 @@ const initOptions = {
 export default function Tinymce(props: { value: string }) {
   const { value } = props
   const editorRef = useRef<any>(null)
+  const tinymceScriptSrc = process.env.NEXT_PUBLIC_BASE_DOC_URL!
 
   useEffect(() => {
-    console.log('1212', props.value)
     if (editorRef.current && props.value) {
       editorRef.current.setContent(props.value)
     }
@@ -162,13 +162,7 @@ export default function Tinymce(props: { value: string }) {
   return (
     <div className="w-full relative">
       <div id="sample" className="TinyMCE_wrap">
-        <Editor
-          tinymceScriptSrc={'http://localhost:3001/tinymce/tinymce.min.js'}
-          onInit={handleEditorInit}
-          value={value}
-          init={initOptions as any}
-          disabled={true}
-        />
+        <Editor tinymceScriptSrc={tinymceScriptSrc} onInit={handleEditorInit} value={value} init={initOptions as any} disabled={true} />
         <div
           id="outside-toc"
           className="outside-toc absolute top-[101px] right-[15px] w-[300px] h-[calc(100% - 140px)] overflow-y-auto p-[10px] z-200 bg-white"
