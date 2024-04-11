@@ -6,6 +6,7 @@ import { message } from 'antd'
 import Tinymce from '@/app/_components/tinymce/tinymce'
 import { base64UrlDecode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
+import Loading from '@/components/loading'
 
 type IFrameType = 'sheet' | 'mindmap' | 'ppt' | 'file' | 'doc'
 
@@ -138,7 +139,7 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
       ) : !isLoading ? (
         <Tinymce value={docValue.current} />
       ) : (
-        <div>加载中...</div>
+        <Loading text="精彩内容即将呈现..." height="80vh" />
       )}
     </>
   )
