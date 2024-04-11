@@ -53,6 +53,16 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   useEffect(() => {
     if (query.aid) {
       getArticle()
+      // 异步执行getDocList并更新状态
+      ;(async () => {
+        try {
+          const doc = await getDocList(Number(query.aid)) // 调用异步函数
+          console.log(doc)
+        } catch (error) {
+          console.error('Error fetching document list:', error)
+          // 这里可以添加错误处理逻辑，比如设置错误状态或显示错误信息
+        }
+      })()
     }
   }, [query.aid, type])
 
@@ -72,38 +82,45 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   const getArticle = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch(`http://10.4.150.56:8029/public_data/${query.aid}/`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      if (!response.ok) {
-        setIsLoading(false)
-        switch (response.status) {
-          case 401:
-            messageApi.error('未登录或登录已过期，请重新登录')
-            break
-          case 403:
-            messageApi.error('无权限访问')
-            break
-          case 404:
-            messageApi.error('文章不存在')
-            break
-          default:
-            break
-        }
-        throw new Error('网络请求失败')
-      }
-      const res = await response.json()
+      // const response = await fetch(`http://10.4.150.56:8029/public_data/${query.aid}/`, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // })
+      // if (!response.ok) {
+      //   setIsLoading(false)
+      //   switch (response.status) {
+      //     case 401:
+      //       messageApi.error('未登录或登录已过期，请重新登录')
+      //       break
+      //     case 403:
+      //       messageApi.error('无权限访问')
+      //       break
+      //     case 404:
+      //       messageApi.error('文章不存在')
+      //       break
+      //     default:
+      //       break
+      //   }
+      //   throw new Error('网络请求失败')
+      // }
+      // const res = await response.json()
+      // setIsLoading(false)
+      // const { code, data, msg } = res
+      // if (code === 1000) {
+      //   docValue.current = data.body
+      //   if (type === 'file') return judegeType()
+      //   sendMessageToIframe()
+      // } else {
+      //   messageApi.error(msg)
+      // }
+      const doc = await getDocList(Number(query.aid))
       setIsLoading(false)
-      const { code, data, msg } = res
-      if (code === 1000) {
-        docValue.current = data.body
+      if (doc) {
+        docValue.current = doc.body
         if (type === 'file') return judegeType()
         sendMessageToIframe()
-      } else {
-        messageApi.error(msg)
       }
     } catch (error) {
       setIsLoading(false)
