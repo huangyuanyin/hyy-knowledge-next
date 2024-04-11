@@ -7,6 +7,7 @@ import Tinymce from '@/app/_components/tinymce/tinymce'
 import { base64UrlDecode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
 import Loading from '@/components/loading'
+import { getDocList } from './action'
 
 type IFrameType = 'sheet' | 'mindmap' | 'ppt' | 'file' | 'doc'
 

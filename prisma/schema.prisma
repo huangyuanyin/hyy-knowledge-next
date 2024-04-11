@@ -1,0 +1,530 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model auth_group {
+  id                     Int                      @id @default(autoincrement())
+  name                   String                   @unique(map: "name") @db.VarChar(150)
+  auth_group_permissions auth_group_permissions[]
+  auth_user_groups       auth_user_groups[]
+}
+
+model auth_group_permissions {
+  id              BigInt          @id @default(autoincrement())
+  group_id        Int
+  permission_id   Int
+  auth_permission auth_permission @relation(fields: [permission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm")
+  auth_group      auth_group      @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id")
+
+  @@unique([group_id, permission_id], map: "auth_group_permissions_group_id_permission_id_0cd325b0_uniq")
+  @@index([permission_id], map: "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm")
+}
+
+model auth_permission {
+  id                         Int                          @id @default(autoincrement())
+  name                       String                       @db.VarChar(255)
+  content_type_id            Int
+  codename                   String                       @db.VarChar(100)
+  auth_group_permissions     auth_group_permissions[]
+  django_content_type        django_content_type          @relation(fields: [content_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_permission_content_type_id_2f476e4b_fk_django_co")
+  auth_user_user_permissions auth_user_user_permissions[]
+
+  @@unique([content_type_id, codename], map: "auth_permission_content_type_id_codename_01ab375a_uniq")
+}
+
+model auth_user {
+  id                         Int                          @id @default(autoincrement())
+  password                   String                       @db.VarChar(128)
+  last_login                 DateTime?                    @db.DateTime(6)
+  is_superuser               Boolean
+  username                   String                       @unique(map: "username") @db.VarChar(150)
+  first_name                 String                       @db.VarChar(150)
+  last_name                  String                       @db.VarChar(150)
+  email                      String                       @db.VarChar(254)
+  is_staff                   Boolean
+  is_active                  Boolean
+  date_joined                DateTime                     @db.DateTime(6)
+  auth_user_groups           auth_user_groups[]
+  auth_user_user_permissions auth_user_user_permissions[]
+}
+
+model auth_user_groups {
+  id         BigInt     @id @default(autoincrement())
+  user_id    Int
+  group_id   Int
+  auth_group auth_group @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_user_groups_group_id_97559544_fk_auth_group_id")
+  auth_user  auth_user  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_user_groups_user_id_6a12ed8b_fk_auth_user_id")
+
+  @@unique([user_id, group_id], map: "auth_user_groups_user_id_group_id_94350c0c_uniq")
+  @@index([group_id], map: "auth_user_groups_group_id_97559544_fk_auth_group_id")
+}
+
+model auth_user_user_permissions {
+  id              BigInt          @id @default(autoincrement())
+  user_id         Int
+  permission_id   Int
+  auth_permission auth_permission @relation(fields: [permission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm")
+  auth_user       auth_user       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id")
+
+  @@unique([user_id, permission_id], map: "auth_user_user_permissions_user_id_permission_id_14a6b632_uniq")
+  @@index([permission_id], map: "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm")
+}
+
+model django_content_type {
+  id              Int               @id @default(autoincrement())
+  app_label       String            @db.VarChar(100)
+  model           String            @db.VarChar(100)
+  auth_permission auth_permission[]
+
+  @@unique([app_label, model], map: "django_content_type_app_label_model_76bd3d3b_uniq")
+}
+
+model django_migrations {
+  id      BigInt   @id @default(autoincrement())
+  app     String   @db.VarChar(255)
+  name    String   @db.VarChar(255)
+  applied DateTime @db.DateTime(6)
+}
+
+model django_session {
+  session_key  String   @id @db.VarChar(40)
+  session_data String   @db.LongText
+  expire_date  DateTime @db.DateTime(6)
+
+  @@index([expire_date], map: "django_session_expire_date_a5c62663")
+}
+
+model t_book_collaborations {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  permtype        String    @db.VarChar(1)
+  permusername    String    @db.VarChar(255)
+  ownertype       String    @db.VarChar(32)
+  ownerid         String    @db.VarChar(12)
+  book_id         Int
+
+  @@unique([book_id, permusername], map: "t_book_collaborations_book_id_permusername_f203aeed_uniq")
+  @@index([book_id], map: "t_book_collaborations_book_id_f7f2124e")
+}
+
+model t_book_settings {
+  id                  Int       @id @default(autoincrement())
+  creator             String?   @db.VarChar(100)
+  modifier            String?   @db.VarChar(100)
+  create_datetime     DateTime? @db.DateTime(6)
+  update_datetime     DateTime? @db.DateTime(6)
+  doc_viewport        String    @db.VarChar(12)
+  enable_comment      String    @db.VarChar(1)
+  enable_auto_publish String    @db.VarChar(1)
+  book_id             Int
+
+  @@index([book_id], map: "t_book_settings_book_id_f831eaa4")
+}
+
+model t_book_stacks {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  name            String    @db.VarChar(255)
+  display_type    String    @db.VarChar(1)
+  is_default      String    @db.VarChar(1)
+  sort            Int?
+  group_id        Int
+  space_id        Int
+
+  @@index([group_id], map: "t_book_stacks_group_id_157b1000")
+  @@index([space_id], map: "t_book_stacks_space_id_05472810")
+}
+
+model t_books {
+  id              Int       @id @default(autoincrement())
+  description     String?   @db.VarChar(255)
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  name            String    @db.VarChar(255)
+  slug            String    @unique(map: "slug") @db.VarChar(64)
+  type            String    @db.VarChar(12)
+  icon            String    @db.LongText
+  cover           String    @db.LongText
+  body            String    @db.LongText
+  public          String    @db.VarChar(1)
+  status          String    @db.VarChar(1)
+  sort            Int?
+  is_delete       String    @db.VarChar(1)
+  group_id        Int
+  space_id        Int
+  stacks_id       Int
+
+  @@index([group_id], map: "t_books_group_id_66debd30")
+  @@index([space_id], map: "t_books_space_id_7890d590")
+  @@index([stacks_id], map: "t_books_stacks_id_9f58d3c6")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model t_content {
+  id                 Int       @id @default(autoincrement())
+  description        String?   @db.VarChar(255)
+  creator            String?   @db.VarChar(100)
+  modifier           String?   @db.VarChar(100)
+  create_datetime    DateTime? @db.DateTime(6)
+  update_datetime    DateTime? @db.DateTime(6)
+  title              String    @db.VarChar(255)
+  type               String    @db.VarChar(12)
+  slug               String    @unique(map: "slug") @db.VarChar(32)
+  cover              String    @db.LongText
+  status             String    @db.VarChar(6)
+  open_windows       String    @db.VarChar(1)
+  indexed_level      String    @db.VarChar(1)
+  public             String    @db.VarChar(1)
+  encrypted_password String    @db.VarChar(1)
+  password           String    @db.VarChar(64)
+  pluginkey          String    @db.VarChar(255)
+  pluginver          String    @db.VarChar(255)
+  sort               Int?
+  views              Int       @db.UnsignedInt
+  counts             Int       @db.UnsignedInt
+  is_selective       String    @db.VarChar(1)
+  is_delete          String    @db.VarChar(1)
+  book_id            Int
+  parent_id          Int?
+  space_id           Int
+
+  @@index([book_id], map: "t_content_book_id_25120a1a")
+  @@index([parent_id], map: "t_content_parent_id_9695458a")
+  @@index([space_id], map: "t_content_space_id_3267f6f6")
+}
+
+model t_content_attachments {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  name            String    @db.VarChar(255)
+  sort            Int?
+  size            BigInt?
+  content_id      Int
+
+  @@unique([name, content_id], map: "t_content_attachments_name_content_id_2589575a_uniq")
+  @@index([content_id], map: "t_content_attachments_content_id_2bc4caee")
+}
+
+model t_content_collaborations {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  role            String    @db.VarChar(2)
+  username        String    @db.VarChar(255)
+  content_id      Int
+
+  @@index([content_id], map: "t_content_collaborations_content_id_72143f45")
+}
+
+model t_content_comments {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  body            String    @db.LongText
+  content_id      Int
+  parent_id       Int?
+
+  @@index([content_id], map: "t_content_comments_content_id_709c2e65")
+  @@index([parent_id], map: "t_content_comments_parent_id_ca2ae56d")
+}
+
+model t_content_doc {
+  id         Int    @id @default(autoincrement())
+  body       String @db.LongText
+  content_id Int
+
+  @@index([content_id], map: "t_content_doc_content_id_e7679474")
+}
+
+model t_content_draw {
+  id         Int    @id @default(autoincrement())
+  body       String @db.LongText
+  content_id Int
+
+  @@index([content_id], map: "t_content_draw_content_id_1d3477c7")
+}
+
+model t_content_flow {
+  id         Int    @id @default(autoincrement())
+  body       String @db.LongText
+  content_id Int
+
+  @@index([content_id], map: "t_content_flow_content_id_b94a6c4c")
+}
+
+model t_content_links {
+  id         Int    @id @default(autoincrement())
+  body       String @db.VarChar(2048)
+  content_id Int
+
+  @@index([content_id], map: "t_content_links_content_id_7e57fad2")
+}
+
+model t_content_mind {
+  id         Int    @id @default(autoincrement())
+  body       String @db.LongText
+  content_id Int
+
+  @@index([content_id], map: "t_content_mind_content_id_f3298e6f")
+}
+
+model t_content_ppt {
+  id         Int    @id @default(autoincrement())
+  body       String @db.LongText
+  content_id Int
+
+  @@index([content_id], map: "t_content_ppt_content_id_3b86b666")
+}
+
+model t_content_sheet {
+  id         Int    @id @default(autoincrement())
+  body       String @db.LongText
+  content_id Int
+
+  @@index([content_id], map: "t_content_sheet_content_id_4c182b91")
+}
+
+model t_content_templates {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  name            String    @db.VarChar(255)
+  body            String    @db.LongText
+  icon            String?   @db.VarChar(255)
+  template_type   String    @db.VarChar(12)
+  target_type     String    @db.VarChar(2)
+  target_id       String?   @db.VarChar(12)
+  content_type    String    @db.VarChar(12)
+  pluginkey       String    @db.VarChar(255)
+}
+
+model t_content_versions {
+  id              Int       @id @default(autoincrement())
+  description     String?   @db.VarChar(255)
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  name            String    @db.VarChar(255)
+  slug            String    @unique(map: "slug") @db.VarChar(32)
+  body            String    @db.LongText
+  type            String    @db.VarChar(12)
+  content_id      Int
+
+  @@unique([name, content_id], map: "t_content_versions_name_content_id_552ea7d2_uniq")
+  @@index([content_id], map: "t_content_versions_content_id_77148025")
+}
+
+model t_group_permissions {
+  id                       Int       @id @default(autoincrement())
+  creator                  String?   @db.VarChar(100)
+  modifier                 String?   @db.VarChar(100)
+  create_datetime          DateTime? @db.DateTime(6)
+  update_datetime          DateTime? @db.DateTime(6)
+  create_book              String    @db.VarChar(1)
+  create_mumber            String    @db.VarChar(1)
+  create_book_collaborator String    @db.VarChar(1)
+  modify_book_setting      String    @db.VarChar(1)
+  export_book              String    @db.VarChar(1)
+  share_book               String    @db.VarChar(1)
+  share_doc                String    @db.VarChar(1)
+  export_doc               String    @db.VarChar(1)
+  force_delete_doc         String    @db.VarChar(1)
+  group_id                 Int
+
+  @@index([group_id], map: "t_group_permissions_group_id_76fbbd07")
+}
+
+model t_group_users {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  role            String    @db.VarChar(1)
+  username        String    @db.VarChar(255)
+  group_id        Int
+
+  @@unique([group_id, username], map: "t_group_users_group_id_username_a961fd6e_uniq")
+  @@index([group_id], map: "t_group_users_group_id_5782972c")
+}
+
+model t_groups {
+  id              Int       @id @default(autoincrement())
+  description     String?   @db.VarChar(255)
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  groupname       String    @db.VarChar(255)
+  groupkey        String    @unique(map: "groupkey") @db.VarChar(255)
+  is_default      String    @db.VarChar(1)
+  body            String    @db.LongText
+  public          String    @db.VarChar(1)
+  icon            String    @db.LongText
+  sort            Int?
+  is_delete       String    @db.VarChar(1)
+  space_id        Int
+
+  @@index([space_id], map: "t_groups_space_id_c05a409a")
+}
+
+model t_mine_actions {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  action_type     String    @db.VarChar(12)
+  target_type     String    @db.VarChar(12)
+  target_id       String    @db.VarChar(255)
+  tags_id         String    @db.VarChar(255)
+  space_id        Int
+
+  @@unique([target_type, target_id, creator, action_type], map: "t_mine_actions_target_type_target_id_cr_b2047367_uniq")
+  @@index([space_id], map: "t_mine_actions_space_id_a5a48734")
+}
+
+model t_mine_activities {
+  id              Int       @id @default(autoincrement())
+  type            String    @db.VarChar(12)
+  target_type     String    @db.VarChar(12)
+  target_id       String    @db.VarChar(255)
+  username        String?   @db.VarChar(100)
+  creator         String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  space_id        Int
+
+  @@index([space_id], map: "t_mine_activities_space_id_0ff1836f")
+}
+
+model t_mine_tags {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  name            String    @db.VarChar(255)
+  action_type     String    @db.VarChar(12)
+  space_id        Int
+
+  @@unique([name, creator, space_id], map: "t_mine_tags_name_creator_space_id_ca8c8aa2_uniq")
+  @@index([space_id], map: "t_mine_tags_space_id_77fa4329")
+}
+
+model t_space_link {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  target_id       String    @db.VarChar(64)
+  target_type     String    @db.VarChar(16)
+  user            String    @db.VarChar(255)
+  url             String?   @db.VarChar(255)
+  sort            Int?
+  space_id        Int
+
+  @@unique([target_id, target_type, user], map: "t_space_link_target_id_target_type_user_0326fa32_uniq")
+  @@index([space_id], map: "t_space_link_space_id_f06b2d3e")
+}
+
+model t_space_permissions {
+  id              Int       @id @default(autoincrement())
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  permtype        String    @db.VarChar(1)
+  permusername    String    @db.VarChar(255)
+  space_id        Int
+
+  @@unique([space_id, permusername], map: "t_space_permissions_space_id_permusername_abbb8097_uniq")
+  @@index([space_id], map: "t_space_permissions_space_id_04e06c00")
+}
+
+model t_space_settings {
+  id                       Int       @id @default(autoincrement())
+  creator                  String?   @db.VarChar(100)
+  modifier                 String?   @db.VarChar(100)
+  create_datetime          DateTime? @db.DateTime(6)
+  update_datetime          DateTime? @db.DateTime(6)
+  indirect_add_org_member  String    @db.VarChar(1)
+  create_group             String    @db.VarChar(1)
+  org_wiki_homepage_enable String    @db.VarChar(1)
+  leaving_info_enable      String    @db.VarChar(1)
+  space_id                 Int
+
+  @@index([space_id], map: "t_space_settings_space_id_6d80be4f")
+}
+
+model t_spaces {
+  id              Int       @id @default(autoincrement())
+  description     String?   @db.VarChar(255)
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  spacename       String    @db.VarChar(255)
+  spacekey        String    @unique(map: "spacekey") @db.VarChar(255)
+  spacestatus     String    @db.VarChar(32)
+  spacetype       String    @db.VarChar(32)
+  icon            String    @db.LongText
+  licensekey      String    @db.LongText
+  is_delete       String    @db.VarChar(1)
+}
+
+model t_system_operation_log {
+  id              Int       @id @default(autoincrement())
+  request_modular String?   @db.VarChar(64)
+  request_path    String?   @db.LongText
+  request_body    String?   @db.LongText
+  request_method  String?   @db.VarChar(8)
+  request_ip      String?   @db.VarChar(32)
+  request_browser String?   @db.VarChar(64)
+  response_code   String?   @db.VarChar(32)
+  request_os      String?   @db.VarChar(64)
+  json_result     String?   @db.LongText
+  status          Boolean
+  creator         String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model t_system_update_log {
+  id              Int       @id @default(autoincrement())
+  description     String?   @db.VarChar(255)
+  creator         String?   @db.VarChar(100)
+  modifier        String?   @db.VarChar(100)
+  create_datetime DateTime? @db.DateTime(6)
+  update_datetime DateTime? @db.DateTime(6)
+  title           String    @db.VarChar(255)
+  type            String    @db.VarChar(12)
+  body            String    @db.LongText
+  slug            String    @unique(map: "slug") @db.VarChar(32)
+  status          String    @db.VarChar(6)
+  sort            Int?
+  views           Int       @db.UnsignedInt
+  counts          Int       @db.UnsignedInt
+  parent_id       Int?
+
+  @@index([parent_id], map: "t_system_update_log_parent_id_09e308af")
+}
