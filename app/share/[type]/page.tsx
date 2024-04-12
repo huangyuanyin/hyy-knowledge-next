@@ -131,7 +131,7 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
     <>
       {contextHolder}
       {!['doc', 'sheet'].includes(type) ? (
-        <div className="flex-1">
+        <div className="h-[calc(100vh-52px)]">
           {iframeSrc ? (
             <iframe
               id="iframe"
