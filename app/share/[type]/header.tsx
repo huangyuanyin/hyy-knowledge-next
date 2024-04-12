@@ -14,10 +14,10 @@ export default function Header() {
   const [decodedQuery, setDecodedQuery] = useState<Query>({
     aname: '',
   })
-  const [isAuth, setIsAuth] = useState<boolean>(false)
+  const [isAuth, setIsAuth] = useState<boolean>(true)
 
   useEffect(() => {
-    setIsAuth(localStorage.getItem('token') ? true : false)
+    // setIsAuth(localStorage.getItem('token') ? true : false)
     if (query) {
       const result = JSON.parse(base64UrlDecode(query))
       setDecodedQuery(result)
@@ -32,7 +32,12 @@ export default function Header() {
     <div className="h-[52px] flex items-center text-[14px] justify-between px-[20px] border border-[#e7e9e8] border-solid">
       <div className="flex items-center">
         {isAuth ? (
-          <Link href={`http://10.4.150.55:8080/knowledge/#/dashboard`} className="inline-flex items-center">
+          <a
+            href={`http://10.4.150.55:8080/knowledge/#/dashboard`}
+            target="_blank"
+            rel="noopener noreferrer" // 出于安全考虑，建议添加这两个属性
+            className="inline-flex items-center"
+          >
             <Image
               src={mainIcon}
               alt="XinAn Logo"
@@ -44,7 +49,7 @@ export default function Header() {
                 cursor: 'pointer',
               }}
             />
-          </Link>
+          </a>
         ) : (
           <Dialog>
             <DialogTrigger asChild>

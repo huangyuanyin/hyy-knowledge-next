@@ -72,46 +72,46 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   const getArticle = async () => {
     try {
       setIsLoading(true)
-      // const response = await fetch(`http://10.4.150.56:8029/public_data/${query.aid}/`, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      // })
-      // if (!response.ok) {
-      //   setIsLoading(false)
-      //   switch (response.status) {
-      //     case 401:
-      //       messageApi.error('未登录或登录已过期，请重新登录')
-      //       break
-      //     case 403:
-      //       messageApi.error('无权限访问')
-      //       break
-      //     case 404:
-      //       messageApi.error('文章不存在')
-      //       break
-      //     default:
-      //       break
-      //   }
-      //   throw new Error('网络请求失败')
-      // }
-      // const res = await response.json()
-      // setIsLoading(false)
-      // const { code, data, msg } = res
-      // if (code === 1000) {
-      //   docValue.current = data.body
-      //   if (type === 'file') return judegeType()
-      //   sendMessageToIframe()
-      // } else {
-      //   messageApi.error(msg)
-      // }
-      const res = await getArticleDetail(type, Number(query.aid))
+      const response = await fetch(`http://10.4.150.56:8029/public_data/${query.aid}/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (!response.ok) {
+        setIsLoading(false)
+        switch (response.status) {
+          case 401:
+            messageApi.error('未登录或登录已过期，请重新登录')
+            break
+          case 403:
+            messageApi.error('无权限访问')
+            break
+          case 404:
+            messageApi.error('文章不存在')
+            break
+          default:
+            break
+        }
+        throw new Error('网络请求失败')
+      }
+      const res = await response.json()
       setIsLoading(false)
-      if (res) {
-        docValue.current = res.body
+      const { code, data, msg } = res
+      if (code === 1000) {
+        docValue.current = data.body
         if (type === 'file') return judegeType()
         sendMessageToIframe()
+      } else {
+        messageApi.error(msg)
       }
+      // const res = await getArticleDetail(type, Number(query.aid))
+      // setIsLoading(false)
+      // if (res) {
+      //   docValue.current = res.body
+      //   if (type === 'file') return judegeType()
+      //   sendMessageToIframe()
+      // }
     } catch (error) {
       setIsLoading(false)
       console.error('获取文章详情时出错:', error)
