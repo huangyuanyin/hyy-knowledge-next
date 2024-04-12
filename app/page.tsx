@@ -1,3 +1,3 @@
 export default function Main() {
-  return <div>Main</div>
+  return <div>该页面暂无内容</div>
 }

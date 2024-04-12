@@ -8,6 +8,8 @@ import { base64UrlDecode } from '@/utils/encrypt'
 import { ContentType, Query } from '@/type/index'
 import Loading from '@/components/loading'
 import { getArticleDetail } from './action'
+import LuckySheetEdtior from '@/components/excel'
+import { sheetData } from '@/components/excel/data'
 
 const iframeUrl: Record<ContentType, { src: string; opera?: string }> = {
   sheet: {
@@ -128,7 +130,7 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   return (
     <>
       {contextHolder}
-      {type !== 'doc' ? (
+      {!['doc', 'sheet'].includes(type) ? (
         <div className="h-full">
           {iframeSrc ? (
             <iframe
@@ -143,7 +145,11 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
           ) : null}
         </div>
       ) : !isLoading ? (
-        <Tinymce value={docValue.current} />
+        type === 'doc' ? (
+          <Tinymce value={docValue.current} />
+        ) : (
+          <LuckySheetEdtior content={docValue.current || sheetData} />
+        )
       ) : (
         <Loading text="精彩内容即将呈现..." height="80vh" />
       )}
