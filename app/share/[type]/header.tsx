@@ -29,7 +29,7 @@ export default function Header() {
   }
 
   return (
-    <div className="h-[52px] flex items-center text-[14px] justify-between px-[20px] border border-[#e7e9e8] border-solid">
+    <div className="h-[52px] flex items-center text-[14px] justify-between px-[20px] border-b border-[#e7e9e8] border-solid">
       <div className="flex items-center">
         {isAuth ? (
           <a

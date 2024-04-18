@@ -1,0 +1,50 @@
+.ant-tree-treenode{
+  height: 34px;
+  padding-bottom: 0px !important;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center  !important;
+  cursor: pointer;
+  span{
+    height: 100%;
+  }
+  &:hover{
+    background-color: #eff0f0;
+    border-radius: 6px;
+  }
+}
+
+.ant-tree-node-content-wrapper {
+  width: 100%;
+  max-width: calc(100% - 50px);
+}
+
+.ant-tree-treenode-selected{
+  background-color: #eff0f0;
+  border-radius: 6px;
+}
+
+.ant-tree-node-content-wrapper{
+  cursor: none;
+  &:hover{
+    background-color: #eff0f0 !important;
+    border-radius: 6px;
+  }
+}
+
+.ant-tree-title{
+  display: inline-flex;
+  height: 34px !important;
+  width: 100%;
+}
+
+.ant-tree-node-selected{
+  background-color: #eff0f0 !important;
+}
+
+.ant-tree-switcher{
+  height: 24px !important;
+  display: inline !important;
+  line-height: 34px !important;
+  margin-top: 2px !important;
+}
