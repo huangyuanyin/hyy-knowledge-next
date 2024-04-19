@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { ChevronRight, Home, ListTree, ChevronDown } from 'lucide-react'
 import mainIcon from '@/assets/favicon.ico'
 import { DownOutlined } from '@ant-design/icons'
-import { Tree, message } from 'antd'
+import { ConfigProvider, Tree, message } from 'antd'
 import type { TreeDataNode, TreeProps } from 'antd'
 import './share.css'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
@@ -152,7 +152,7 @@ export default function Directory({ currentPath }: { currentPath: string }) {
             <span className="text-base text-[#262626] font-bold">{decodedQuery.current.lname}</span>
           </div>
         </div>
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col">
           <Link href={`/share/book/[index]?query=encodeQuery`} as={`/share/book/index?query=${encodeQuery}`} onClick={() => toUrl('index')}>
             <div
               className={`h-[32px] flex items-center cursor-pointer relative py-[5px] px-[8px] mx-[8px] mt-[10px] rounded-md ${
@@ -167,10 +167,23 @@ export default function Directory({ currentPath }: { currentPath: string }) {
             <ListTree className="h-[16px] w-[16px] mr-[12px] text-[#262626]" />
             <span className="text-sm text-[#262626]">目录</span>
           </div>
-          <div className="px-[8px] w-full mt-[6px]">
+        </div>
+
+        <div className="px-[8px] w-full mt-[6px] flex-1 overflow-y-auto h-[calc(100%-190px)]">
+          <ConfigProvider
+            theme={{
+              components: {
+                Tree: {
+                  nodeHoverBg: '#eff0f0',
+                  directoryNodeSelectedColor: '#262626',
+                  titleHeight: 34,
+                },
+              },
+            }}
+          >
             <Tree
+              autoExpandParent
               blockNode
-              // switcherIcon={<ChevronDown className="h-[14px] w-[14px] text-[#585a5a] leading-6" />}
               switcherIcon={(props: any) => {
                 const rotateStyle = expandedKeys.includes(props.id) ? { transform: 'rotate(360deg)' } : {}
                 return <ChevronDown className="h-[14px] w-[14px] text-[#585a5a] leading-6 transform -rotate-90" style={rotateStyle} />
@@ -181,13 +194,15 @@ export default function Directory({ currentPath }: { currentPath: string }) {
               treeData={treeData}
               titleRender={(node: any) => (
                 <div className="flex items-center w-full">
-                  <p className={`text-sm text-[#262626]  truncate w-full ${selectedId === node.id ? 'font-bold' : ''}`}>{node.title}</p>
+                  <p className={`text-sm text-[#262626]  truncate w-full leading-[34px] ${selectedId === node.id ? 'font-bold' : ''}`}>
+                    {node.title}
+                  </p>
                 </div>
               )}
               onSelect={handleSelect}
               onExpand={onExpand}
             />
-          </div>
+          </ConfigProvider>
         </div>
       </div>
     </>

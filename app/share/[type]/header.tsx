@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { base64UrlDecode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
@@ -10,6 +10,7 @@ import Link from 'next/link'
 // import { ChangeTheme } from '@/components/change-theme'
 
 export default function Header() {
+  const path = usePathname()
   const query = useSearchParams().get('query')
   const [decodedQuery, setDecodedQuery] = useState<Query>({
     aname: '',
@@ -28,9 +29,9 @@ export default function Header() {
     window.location.reload()
   }
 
-  return (
-    <div className="h-[52px] flex items-center text-[14px] justify-between px-[20px] border-b border-[#e7e9e8] border-solid">
-      <div className="flex items-center">
+  function BookIcon() {
+    return (
+      <>
         {isAuth ? (
           <a
             href={`http://10.4.150.55:8080/knowledge/#/dashboard`}
@@ -75,7 +76,14 @@ export default function Header() {
             </DialogContent>
           </Dialog>
         )}
+      </>
+    )
+  }
 
+  return (
+    <div className="h-[52px] flex items-center text-[14px] justify-between px-[20px] border-b border-[#e7e9e8] border-solid">
+      <div className="flex items-center">
+        {!path.includes('/book') && <BookIcon />}
         <span className="text-[14px] text-[#585a5a] max-w-[60vw]">{decodedQuery.aname}</span>
       </div>
       {/* <ChangeTheme /> */}
