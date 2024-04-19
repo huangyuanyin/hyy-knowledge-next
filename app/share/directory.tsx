@@ -24,10 +24,10 @@ export default function Directory({ currentPath }: { currentPath: string }) {
   const [encodeQuery, setEncodeQuery] = useState<string>('')
   const type = useRef<string>(currentPath.split('/')[currentPath.split('/').length - 1])
 
-  const [expandedKeys, setExpandedKeys] = useState([])
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([])
 
-  const onExpand = (expandedKeys: any) => {
-    setExpandedKeys(expandedKeys)
+  const onExpand = (expandedKeys: React.Key[]) => {
+    setExpandedKeys(expandedKeys as string[])
   }
 
   useEffect(() => {

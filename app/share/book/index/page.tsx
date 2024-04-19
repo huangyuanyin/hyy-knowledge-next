@@ -21,10 +21,10 @@ export default function BookIndex({ params }: { params: { type: ContentType } })
   const [isLoading, setIsLoading] = useState<Boolean>(false)
   const decodedQuery = useRef<Query>({})
 
-  const [expandedKeys, setExpandedKeys] = useState([])
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([])
 
-  const onExpand = (expandedKeys: any) => {
-    setExpandedKeys(expandedKeys)
+  const onExpand = (expandedKeys: React.Key[]) => {
+    setExpandedKeys(expandedKeys as string[])
   }
 
   useEffect(() => {
