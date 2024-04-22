@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Table, message, notification } from 'antd'
 import type { TableProps } from 'antd'
 import CopyToClipboard from '@uiw/react-copy-to-clipboard'
