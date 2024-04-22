@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, Suspense } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ChevronDown } from 'lucide-react'
@@ -114,69 +114,67 @@ export default function BookIndex({ params, searchParams }: { params: { type: Co
   return (
     <>
       {contextHolder}
-      <Suspense>
-        <div className="px-[32px] pt-[64px] relative bg-[#fafafa]">
-          <div className="max-w-[1024px] bg-white p-[32px] min-h-[calc(100vh-64px)] rounded-2xl mx-auto">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Image
-                  src={bookDetail.icon}
-                  alt=""
-                  width={38}
-                  height={38}
-                  style={{
-                    borderRadius: '4px',
-                  }}
-                />
-                <span className="text-[28px] font-bold ml-[18px] text-[#262626]">信安更新日志</span>
-              </div>
-              <div></div>
-            </div>
-            <div className="flex items-center my-[6px] ml-[58px] mt-[15px]">
-              <span className="text-sm text-[#8a8f8d] text-center mr-[33px]">
-                <b className="text-lg font-bold text-[#585a5a] mr-[4px]">{bookDetail.article_count}</b>
-                文档
-              </span>
-              <span className="text-sm text-[#8a8f8d] text-center mr-[33px]">
-                <b className="text-lg font-bold text-[#585a5a] mr-[4px]">{bookDetail.word_count}</b>字
-              </span>
-            </div>
-            <div className="h-[52px]"></div>
-            <div className="">
-              <ConfigProvider
-                theme={{
-                  components: {
-                    Tree: {
-                      nodeHoverBg: '#eff0f0',
-                      directoryNodeSelectedColor: '#262626',
-                      titleHeight: 34,
-                    },
-                  },
+      <div className="px-[32px] pt-[64px] relative bg-[#fafafa]">
+        <div className="max-w-[1024px] bg-white p-[32px] min-h-[calc(100vh-64px)] rounded-2xl mx-auto">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Image
+                src={bookDetail.icon}
+                alt=""
+                width={38}
+                height={38}
+                style={{
+                  borderRadius: '4px',
                 }}
-              >
-                <Tree
-                  blockNode
-                  switcherIcon={(props: any) => {
-                    const rotateStyle = expandedKeys.includes(props.id) ? { transform: 'rotate(360deg)' } : {}
-                    return <ChevronDown className="h-[14px] w-[14px] text-[#585a5a] leading-6 transform -rotate-90" style={rotateStyle} />
-                  }}
-                  fieldNames={{ title: 'title', key: 'id', children: 'children' }}
-                  treeData={treeData}
-                  titleRender={(node: any) => (
-                    <div className="flex items-center justify-between w-full">
-                      <span className={`text-sm text-[#262626] truncate leading-[34px] block`}>{node.title}</span>
-                      {node.type !== 'title' && <span className="flex-1 mx-[16px] border-t border-dashed border-[#d8dad9]"></span>}
-                      {node.type !== 'title' && <span className="text-right block">{node.update_datetime}</span>}
-                    </div>
-                  )}
-                  onSelect={handleSelect}
-                  onExpand={onExpand}
-                />
-              </ConfigProvider>
+              />
+              <span className="text-[28px] font-bold ml-[18px] text-[#262626]">信安更新日志</span>
             </div>
+            <div></div>
+          </div>
+          <div className="flex items-center my-[6px] ml-[58px] mt-[15px]">
+            <span className="text-sm text-[#8a8f8d] text-center mr-[33px]">
+              <b className="text-lg font-bold text-[#585a5a] mr-[4px]">{bookDetail.article_count}</b>
+              文档
+            </span>
+            <span className="text-sm text-[#8a8f8d] text-center mr-[33px]">
+              <b className="text-lg font-bold text-[#585a5a] mr-[4px]">{bookDetail.word_count}</b>字
+            </span>
+          </div>
+          <div className="h-[52px]"></div>
+          <div className="">
+            <ConfigProvider
+              theme={{
+                components: {
+                  Tree: {
+                    nodeHoverBg: '#eff0f0',
+                    directoryNodeSelectedColor: '#262626',
+                    titleHeight: 34,
+                  },
+                },
+              }}
+            >
+              <Tree
+                blockNode
+                switcherIcon={(props: any) => {
+                  const rotateStyle = expandedKeys.includes(props.id) ? { transform: 'rotate(360deg)' } : {}
+                  return <ChevronDown className="h-[14px] w-[14px] text-[#585a5a] leading-6 transform -rotate-90" style={rotateStyle} />
+                }}
+                fieldNames={{ title: 'title', key: 'id', children: 'children' }}
+                treeData={treeData}
+                titleRender={(node: any) => (
+                  <div className="flex items-center justify-between w-full">
+                    <span className={`text-sm text-[#262626] truncate leading-[34px] block`}>{node.title}</span>
+                    {node.type !== 'title' && <span className="flex-1 mx-[16px] border-t border-dashed border-[#d8dad9]"></span>}
+                    {node.type !== 'title' && <span className="text-right block">{node.update_datetime}</span>}
+                  </div>
+                )}
+                onSelect={handleSelect}
+                onExpand={onExpand}
+              />
+            </ConfigProvider>
           </div>
         </div>
-      </Suspense>
+      </div>
     </>
   )
 }
