@@ -15,9 +15,7 @@ import './title.css'
 export default function TitlePage({ params, searchParams }: { params: { type: 'title' }; searchParams: { query: string } }) {
   const router = useRouter()
   const [api, contextHolder2] = notification.useNotification()
-  const {
-    query = 'eyJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiI2MCIsImxuYW1lIjoi6Ieq5Yqo5YyW5rWL6K-V6YOoLeW8gOWPkUZBUSIsImdpZCI6IjciLCJnbmFtZSI6IuiHquWKqOWMlua1i-ivlemDqCJ9',
-  } = searchParams
+  const { query } = searchParams
   const decodedQuery = useRef<Query>({})
   const docValue = useRef<any>({})
   const [messageApi, contextHolder] = message.useMessage()

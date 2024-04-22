@@ -31,9 +31,9 @@ const iframeUrl: Record<ContentType, { src: string; opera?: string }> = {
   },
 }
 
-export default function ArticleDetail({ params }: { params: { type: ContentType } }) {
-  const query =
-    'eyJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiIxMDYiLCJsbmFtZSI6IuefpeivhuW6k-WcqOe6v-S9v-eUqOaJi-WGjCIsImdpZCI6IjciLCJnbmFtZSI6IuiHquWKqOWMlua1i-ivlemDqCJ9'
+export default function ArticleDetail({ params, searchParams }: { params: { type: ContentType }; searchParams: any }) {
+  const { query } = searchParams
+
   const [messageApi, contextHolder] = message.useMessage()
   const { type } = params
   const docValue = useRef<string>('')

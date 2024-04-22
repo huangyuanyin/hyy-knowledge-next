@@ -13,10 +13,8 @@ import './share.css'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
 
-export default function Directory({ currentPath }: { currentPath: string }) {
+export default function Directory({ currentPath, query }: { currentPath: string; query: any }) {
   const router = useRouter()
-  const query =
-    'eyJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiI2MCIsImxuYW1lIjoi6Ieq5Yqo5YyW5rWL6K-V6YOoLeW8gOWPkUZBUSIsImdpZCI6IjciLCJnbmFtZSI6IuiHquWKqOWMlua1i-ivlemDqCJ9'
   const [messageApi, contextHolder] = message.useMessage()
   const [treeData, setTreeData] = useState<TreeDataNode[]>([])
   const [isLoading, setIsLoading] = useState<Boolean>(false)

@@ -11,9 +11,7 @@ import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 
 export default function BookIndex({ params, searchParams }: { params: { type: ContentType }; searchParams: { query: string } }) {
   const router = useRouter()
-  const {
-    query = 'eyJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiI2MCIsImxuYW1lIjoi6Ieq5Yqo5YyW5rWL6K-V6YOoLeW8gOWPkUZBUSIsImdpZCI6IjciLCJnbmFtZSI6IuiHquWKqOWMlua1i-ivlemDqCJ9',
-  } = searchParams
+  const { query } = searchParams
   const [messageApi, contextHolder] = message.useMessage()
   const [treeData, setTreeData] = useState<TreeDataNode[]>([])
   const [bookDetail, setBookDetail] = useState<any>({})
