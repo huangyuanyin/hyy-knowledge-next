@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { base64UrlDecode } from '@/utils/encrypt'
@@ -12,8 +12,7 @@ import Link from 'next/link'
 // import { ChangeTheme } from '@/components/change-theme'
 
 export default function Header() {
-  const query =
-    'eyJnaWQiOiI3IiwiZ25hbWUiOiLoh6rliqjljJbmtYvor5Xpg6giLCJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiI2MCIsImxuYW1lIjoi6Ieq5Yqo5YyW5rWL6K-V6YOoLeW8gOWPkUZBUSIsImFpZCI6IjQ2NTkiLCJhbmFtZSI6IkZBUSJ9'
+  const query = useRef('')
   const path = usePathname()
   const [decodedQuery, setDecodedQuery] = useState<Query>({
     aname: '',
@@ -21,12 +20,15 @@ export default function Header() {
   const [isAuth, setIsAuth] = useState<boolean>(true)
 
   useEffect(() => {
-    // setIsAuth(localStorage.getItem('token') ? true : false)
-    if (query) {
-      const result = JSON.parse(base64UrlDecode(query))
+    const equalsIndex = window.location.search.indexOf('=')
+    if (equalsIndex !== -1) {
+      query.current = window.location.search.substring(equalsIndex + 1)
+    }
+    if (query.current) {
+      const result = JSON.parse(base64UrlDecode(query.current))
       setDecodedQuery(result)
     }
-  }, [query])
+  }, [window.location])
 
   const handleLoginSuccess = () => {
     window.location.reload()

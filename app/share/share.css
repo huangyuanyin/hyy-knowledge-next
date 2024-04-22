@@ -1,3 +1,19 @@
+.articleTree{
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgb(239, 239, 239);
+    border-radius: 2px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #bfbfbf;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
+
 .ant-tree-treenode{
   height: 34px;
   padding-bottom: 0px !important;

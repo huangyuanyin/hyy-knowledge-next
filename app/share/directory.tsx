@@ -17,6 +17,7 @@ export default function Directory({ currentPath }: { currentPath: string }) {
   const router = useRouter()
   const query = useRef('')
   const [messageApi, contextHolder] = message.useMessage()
+  const [bookDetail, setBookDetail] = useState<any>({})
   const [treeData, setTreeData] = useState<TreeDataNode[]>([])
   const [isLoading, setIsLoading] = useState<Boolean>(false)
   const [selectedId, setSelectedId] = useState<Number | null>(null)
@@ -45,6 +46,7 @@ export default function Directory({ currentPath }: { currentPath: string }) {
   }, [query.current])
 
   useEffect(() => {
+    getBookDetail()
     getArticleList()
     type.current = currentPath.split('/')[currentPath.split('/').length - 1]
   }, [query.current, currentPath])
@@ -82,6 +84,34 @@ export default function Directory({ currentPath }: { currentPath: string }) {
       }
     } catch (error) {
       setIsLoading(false)
+    }
+  }
+
+  const getBookDetail = async () => {
+    const response = await fetch(`http://10.4.150.56:8029/docs/${decodedQuery.current.lid}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    if (!response.ok) {
+      setIsLoading(false)
+      switch (response.status) {
+        case 404:
+          messageApi.error('知识库不存在')
+          break
+        default:
+          break
+      }
+      throw new Error('网络请求失败')
+    }
+    const res = await response.json()
+    setIsLoading(false)
+    const { code, data, msg } = res
+    if (code === 1000) {
+      setBookDetail(data)
+    } else {
+      messageApi.error(msg)
     }
   }
 
@@ -143,11 +173,11 @@ export default function Directory({ currentPath }: { currentPath: string }) {
           </div>
           <div className="flex items-center w-full flex-1 ml-[4px] h-[36px]">
             <Image
-              src={mainIcon}
+              src={bookDetail.icon}
               alt="XinAn Logo"
+              width={20}
+              height={20}
               style={{
-                width: '20px',
-                height: '20px',
                 borderRadius: '4px',
                 cursor: 'pointer',
                 marginRight: '10px',
@@ -157,23 +187,22 @@ export default function Directory({ currentPath }: { currentPath: string }) {
           </div>
         </div>
         <div className="flex flex-col">
-          <Link href={`/share/book/[index]?query=encodeQuery`} as={`/share/book/index?query=${encodeQuery}`} onClick={() => toUrl('index')}>
-            <div
-              className={`h-[32px] flex items-center cursor-pointer relative py-[5px] px-[8px] mx-[8px] mt-[10px] rounded-md ${
-                type.current === 'index' ? 'bg-[#eff0f0]' : ''
-              }`}
-            >
-              <Home className="h-[16px] w-[16px] mr-[12px] text-[#262626]" />
-              <span className="text-sm text-[#262626]">首页</span>
-            </div>
-          </Link>
+          <div
+            className={`h-[32px] flex items-center cursor-pointer relative py-[5px] px-[8px] mx-[8px] mt-[10px] rounded-md ${
+              type.current === 'index' ? 'bg-[#eff0f0]' : ''
+            }`}
+            onClick={() => toUrl('index')}
+          >
+            <Home className="h-[16px] w-[16px] mr-[12px] text-[#262626]" />
+            <span className="text-sm text-[#262626]">首页</span>
+          </div>
           <div className="h-[32px] flex items-center cursor-pointer relative py-[5px] px-[8px] mx-[8px] mt-[6px] rounded-md">
             <ListTree className="h-[16px] w-[16px] mr-[12px] text-[#262626]" />
             <span className="text-sm text-[#262626]">目录</span>
           </div>
         </div>
 
-        <div className="px-[8px] w-full mt-[6px] flex-1 overflow-y-auto h-[calc(100%-190px)]">
+        <div className="articleTree px-[8px] w-full mt-[6px] flex-1 overflow-y-auto h-[calc(100%-190px)]">
           <ConfigProvider
             theme={{
               components: {
