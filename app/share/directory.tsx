@@ -12,7 +12,7 @@ import './share.css'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
 
-export default function Directory({ query }: { query: string }) {
+export default function Directory() {
   const router = useRouter()
   const currentPath = usePathname()
   const [messageApi, contextHolder] = message.useMessage()
@@ -33,18 +33,19 @@ export default function Directory({ query }: { query: string }) {
   }
 
   useEffect(() => {
-    if (query) {
+    if (currentPath) {
+      const query = currentPath.split('/')[currentPath.split('/').length - 1]
       const result = JSON.parse(base64UrlDecode(query))
       decodedQuery.current = result
       setSelectedId(Number(decodedQuery.current.aid) || null)
     }
-  }, [query])
+  }, [currentPath])
 
   useEffect(() => {
     getBookDetail()
     getArticleList()
     type.current = currentPath.split('/')[currentPath.split('/').length - 1]
-  }, [query, currentPath])
+  }, [currentPath])
 
   const getArticleList = async () => {
     try {
@@ -119,7 +120,7 @@ export default function Directory({ query }: { query: string }) {
     }
     const hash = base64UrlEncode(JSON.stringify(query))
     setEncodeQuery(hash)
-    router.push(`/share/book/${info.node.type}?query=${hash}`)
+    router.push(`/share/book/${info.node.type}/${hash}`)
   }
 
   const toUrl = (type: string) => {
@@ -132,7 +133,7 @@ export default function Directory({ query }: { query: string }) {
         }
         const hash = base64UrlEncode(JSON.stringify(query))
         setEncodeQuery(hash)
-        router.push(`/share/book/${type}?query=${hash}`)
+        router.push(`/share/book/${type}/${hash}`)
         break
       default:
         break

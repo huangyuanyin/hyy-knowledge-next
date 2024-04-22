@@ -2,16 +2,16 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { ChevronDown } from 'lucide-react'
 import { ConfigProvider, Tree, message } from 'antd'
 import type { TreeDataNode, TreeProps } from 'antd'
 import { ContentType, Query } from '@/type/index'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 
-export default function BookIndex({ params, searchParams }: { params: { type: ContentType }; searchParams: { query: string } }) {
+export default function BookIndex({ params }: { params: { type: ContentType } }) {
   const router = useRouter()
-  const { query } = searchParams
+  const path = usePathname()
   const [messageApi, contextHolder] = message.useMessage()
   const [treeData, setTreeData] = useState<TreeDataNode[]>([])
   const [bookDetail, setBookDetail] = useState<any>({})
@@ -25,16 +25,18 @@ export default function BookIndex({ params, searchParams }: { params: { type: Co
   }
 
   useEffect(() => {
-    if (query) {
+    console.log(path)
+    if (path) {
+      const query = path.split('/')[path.split('/').length - 1]
       const result = JSON.parse(base64UrlDecode(query))
       decodedQuery.current = result
     }
-  }, [query])
+  }, [path])
 
   useEffect(() => {
     getArticleList()
     getBookDetail()
-  }, [query])
+  }, [path])
 
   const getArticleList = async () => {
     try {
@@ -106,7 +108,7 @@ export default function BookIndex({ params, searchParams }: { params: { type: Co
       aname: info.node.title,
     }
     const hash = base64UrlEncode(JSON.stringify(query))
-    router.push(`/share/book/${info.node.type}?query=${hash}`)
+    router.push(`/share/book/${info.node.type}/${hash}`)
   }
 
   return (

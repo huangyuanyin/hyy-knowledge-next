@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { Table, message, notification } from 'antd'
 import type { TableProps } from 'antd'
 import CopyToClipboard from '@uiw/react-copy-to-clipboard'
@@ -12,11 +12,10 @@ import { articleType } from '@/data/data'
 import shareIcon from '@/assets/icons/share.svg'
 import './title.css'
 
-export default function TitlePage({ params, searchParams }: { params: { type: 'title' }; searchParams: { query: string } }) {
+export default function TitlePage({ params }: { params: { type: 'title' } }) {
   const router = useRouter()
-  const path = useRef<string>('')
+  const path = usePathname()
   const [api, contextHolder2] = notification.useNotification()
-  const { query } = searchParams
   const decodedQuery = useRef<Query>({})
   const docValue = useRef<any>({})
   const [messageApi, contextHolder] = message.useMessage()
@@ -58,17 +57,17 @@ export default function TitlePage({ params, searchParams }: { params: { type: 't
   ]
 
   useEffect(() => {
-    if (query) {
-      path.current = window.location.href
+    if (path) {
+      const query = path.split('/')[path.split('/').length - 1]
       const result = JSON.parse(base64UrlDecode(query))
       decodedQuery.current = result
     }
-  }, [query])
+  }, [path])
 
   useEffect(() => {
     getTitleList()
     getArticle()
-  }, [query])
+  }, [path])
 
   const getTitleList = async () => {
     const response = await fetch(`http://10.4.150.56:8029/public_category/?node_id=${decodedQuery.current.aid}&action=children`, {
@@ -157,7 +156,7 @@ export default function TitlePage({ params, searchParams }: { params: { type: 't
                   aname: record.title,
                 }
                 const hash = base64UrlEncode(JSON.stringify(query))
-                router.push(`/share/book/${record.type}?query=${hash}`)
+                router.push(`/share/book/${record.type}/${hash}`)
               },
             })}
           />
@@ -168,7 +167,7 @@ export default function TitlePage({ params, searchParams }: { params: { type: 't
             <Image src={articleType['title']} alt="" width={68} height={68} />
           </div>
           <CopyToClipboard
-            text={path.current}
+            text={path}
             onClick={() => {
               api.success({
                 message: '复制成功',

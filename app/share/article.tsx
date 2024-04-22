@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Base64 } from 'js-base64'
 import { message } from 'antd'
 import Tinymce from '@/app/_components/tinymce/tinymce'
@@ -31,9 +32,8 @@ const iframeUrl: Record<ContentType, { src: string; opera?: string }> = {
   },
 }
 
-export default function ArticleDetail({ params, searchParams }: { params: { type: ContentType }; searchParams: any }) {
-  const { query } = searchParams
-
+export default function ArticleDetail({ params }: { params: { type: ContentType } }) {
+  const path = usePathname()
   const [messageApi, contextHolder] = message.useMessage()
   const { type } = params
   const docValue = useRef<string>('')
@@ -43,11 +43,12 @@ export default function ArticleDetail({ params, searchParams }: { params: { type
   const [encodeQuery, setEncodeQuery] = useState<Query>({})
 
   useEffect(() => {
-    if (query) {
+    if (path) {
+      const query = path.split('/')[path.split('/').length - 1]
       const decodedQuery = JSON.parse(base64UrlDecode(query))
       setEncodeQuery(decodedQuery)
     }
-  }, [query])
+  }, [path])
 
   useEffect(() => {
     if (encodeQuery.aid) {

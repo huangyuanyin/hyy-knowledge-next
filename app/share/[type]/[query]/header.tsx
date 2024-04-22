@@ -11,7 +11,7 @@ import { UserLoginForm } from '@/app/_components/form/user-login-form'
 import Link from 'next/link'
 // import { ChangeTheme } from '@/components/change-theme'
 
-export default function Header({ query }: { query: string }) {
+export default function Header() {
   const path = usePathname()
   const [decodedQuery, setDecodedQuery] = useState<Query>({
     aname: '',
@@ -19,11 +19,12 @@ export default function Header({ query }: { query: string }) {
   const [isAuth, setIsAuth] = useState<boolean>(true)
 
   useEffect(() => {
-    if (query) {
+    if (path) {
+      const query = path.split('/')[path.split('/').length - 1]
       const result = JSON.parse(base64UrlDecode(query))
       setDecodedQuery(result)
     }
-  }, [query])
+  }, [path])
 
   const handleLoginSuccess = () => {
     window.location.reload()
