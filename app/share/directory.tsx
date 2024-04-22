@@ -13,8 +13,9 @@ import './share.css'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
 
-export default function Directory({ currentPath, query }: { currentPath: string; query: any }) {
+export default function Directory({ currentPath }: { currentPath: string }) {
   const router = useRouter()
+  const query = useRef('')
   const [messageApi, contextHolder] = message.useMessage()
   const [treeData, setTreeData] = useState<TreeDataNode[]>([])
   const [isLoading, setIsLoading] = useState<Boolean>(false)
@@ -30,19 +31,23 @@ export default function Directory({ currentPath, query }: { currentPath: string;
   }
 
   useEffect(() => {
-    if (query) {
-      const result = JSON.parse(base64UrlDecode(query))
+    const equalsIndex = window.location.search.indexOf('=')
+    if (equalsIndex !== -1) {
+      query.current = window.location.search.substring(equalsIndex + 1)
+    }
+    if (query.current) {
+      const result = JSON.parse(base64UrlDecode(query.current))
       decodedQuery.current = result
       console.log(decodedQuery.current)
       setSelectedId(Number(decodedQuery.current.aid) || null)
       console.log(selectedId)
     }
-  }, [query])
+  }, [query.current])
 
   useEffect(() => {
     getArticleList()
     type.current = currentPath.split('/')[currentPath.split('/').length - 1]
-  }, [query, currentPath])
+  }, [query.current, currentPath])
 
   const getArticleList = async () => {
     try {
