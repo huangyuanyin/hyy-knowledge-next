@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSearchParams, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { base64UrlDecode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
@@ -13,7 +13,8 @@ import Link from 'next/link'
 
 export default function Header() {
   const path = usePathname()
-  const query = useSearchParams().get('query')
+  const query =
+    'eyJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiIxMDYiLCJsbmFtZSI6IuefpeivhuW6k-WcqOe6v-S9v-eUqOaJi-WGjCIsImdpZCI6IjciLCJnbmFtZSI6IuiHquWKqOWMlua1i-ivlemDqCJ9'
   const [decodedQuery, setDecodedQuery] = useState<Query>({
     aname: '',
   })
