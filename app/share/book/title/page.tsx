@@ -168,7 +168,7 @@ export default function TitlePage({ params, searchParams }: { params: { type: 't
             <Image src={articleType['title']} alt="" width={68} height={68} />
           </div>
           <CopyToClipboard
-            text={window.location.href}
+            text={'dda'}
             onClick={() => {
               api.success({
                 message: '复制成功',

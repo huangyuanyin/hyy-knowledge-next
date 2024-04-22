@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { ChevronRight, Home, ListTree, ChevronDown } from 'lucide-react'
 import mainIcon from '@/assets/favicon.ico'
 import { DownOutlined } from '@ant-design/icons'
@@ -16,7 +16,6 @@ import { Query } from '@/type/index'
 export default function Directory({ currentPath }: { currentPath: string }) {
   const router = useRouter()
   const query =
-    useSearchParams().get('query') ||
     'eyJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiI2MCIsImxuYW1lIjoi6Ieq5Yqo5YyW5rWL6K-V6YOoLeW8gOWPkUZBUSIsImdpZCI6IjciLCJnbmFtZSI6IuiHquWKqOWMlua1i-ivlemDqCJ9'
   const [messageApi, contextHolder] = message.useMessage()
   const [treeData, setTreeData] = useState<TreeDataNode[]>([])

@@ -9,7 +9,6 @@ import { ContentType, Query } from '@/type/index'
 import Loading from '@/components/loading'
 import LuckySheetEdtior from '@/components/excel'
 import { sheetData } from '@/components/excel/data'
-import { useSearchParams } from 'next/navigation'
 
 const iframeUrl: Record<ContentType, { src: string; opera?: string }> = {
   sheet: {
@@ -34,7 +33,6 @@ const iframeUrl: Record<ContentType, { src: string; opera?: string }> = {
 
 export default function ArticleDetail({ params }: { params: { type: ContentType } }) {
   const query =
-    useSearchParams().get('query') ||
     'eyJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiIxMDYiLCJsbmFtZSI6IuefpeivhuW6k-WcqOe6v-S9v-eUqOaJi-WGjCIsImdpZCI6IjciLCJnbmFtZSI6IuiHquWKqOWMlua1i-ivlemDqCJ9'
   const [messageApi, contextHolder] = message.useMessage()
   const { type } = params
