@@ -11,7 +11,7 @@ import { UserLoginForm } from '@/app/_components/form/user-login-form'
 import Link from 'next/link'
 // import { ChangeTheme } from '@/components/change-theme'
 
-export default function Header({ query }: { query: string }) {
+export default function Header({ query }: { query: any }) {
   const path = usePathname()
   const [decodedQuery, setDecodedQuery] = useState<Query>({
     aname: '',
