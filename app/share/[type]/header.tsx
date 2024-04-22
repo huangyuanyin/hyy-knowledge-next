@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { base64UrlDecode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
@@ -12,7 +12,7 @@ import Link from 'next/link'
 // import { ChangeTheme } from '@/components/change-theme'
 
 export default function Header() {
-  const query = useRef('')
+  const query = useSearchParams().get('query')
   const path = usePathname()
   const [decodedQuery, setDecodedQuery] = useState<Query>({
     aname: '',
@@ -20,15 +20,11 @@ export default function Header() {
   const [isAuth, setIsAuth] = useState<boolean>(true)
 
   useEffect(() => {
-    const equalsIndex = window.location.search.indexOf('=')
-    if (equalsIndex !== -1) {
-      query.current = window.location.search.substring(equalsIndex + 1)
-    }
-    if (query.current) {
-      const result = JSON.parse(base64UrlDecode(query.current))
+    if (query) {
+      const result = JSON.parse(base64UrlDecode(query))
       setDecodedQuery(result)
     }
-  }, [query.current])
+  }, [query])
 
   const handleLoginSuccess = () => {
     window.location.reload()

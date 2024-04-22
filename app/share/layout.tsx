@@ -1,4 +1,5 @@
 'use client'
+
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
@@ -11,7 +12,7 @@ const ShareLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <ResizablePanelGroup direction="horizontal" className="max-w-[100vw] rounded-lg">
       <ResizablePanel defaultSize={15} maxSize={15} minSize={10}>
-        <Directory currentPath={pathname} />
+        <Directory />
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={85}>

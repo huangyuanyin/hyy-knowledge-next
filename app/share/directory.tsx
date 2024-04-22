@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { ChevronRight, Home, ListTree, ChevronDown } from 'lucide-react'
 import mainIcon from '@/assets/favicon.ico'
 import { DownOutlined } from '@ant-design/icons'
@@ -13,11 +12,14 @@ import './share.css'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
 
-export default function Directory({ currentPath }: { currentPath: string }) {
+export default function Directory() {
   const router = useRouter()
-  const query = useRef('')
+  const currentPath = usePathname()
+  const query = useSearchParams().get('query')
   const [messageApi, contextHolder] = message.useMessage()
-  const [bookDetail, setBookDetail] = useState<any>({})
+  const [bookDetail, setBookDetail] = useState<any>({
+    icon: mainIcon,
+  })
   const [treeData, setTreeData] = useState<TreeDataNode[]>([])
   const [isLoading, setIsLoading] = useState<Boolean>(false)
   const [selectedId, setSelectedId] = useState<Number | null>(null)
@@ -32,24 +34,18 @@ export default function Directory({ currentPath }: { currentPath: string }) {
   }
 
   useEffect(() => {
-    const equalsIndex = window.location.search.indexOf('=')
-    if (equalsIndex !== -1) {
-      query.current = window.location.search.substring(equalsIndex + 1)
-    }
-    if (query.current) {
-      const result = JSON.parse(base64UrlDecode(query.current))
+    if (query) {
+      const result = JSON.parse(base64UrlDecode(query))
       decodedQuery.current = result
-      console.log(decodedQuery.current)
       setSelectedId(Number(decodedQuery.current.aid) || null)
-      console.log(selectedId)
     }
-  }, [query.current])
+  }, [query])
 
   useEffect(() => {
     getBookDetail()
     getArticleList()
     type.current = currentPath.split('/')[currentPath.split('/').length - 1]
-  }, [query.current, currentPath])
+  }, [query, currentPath])
 
   const getArticleList = async () => {
     try {
@@ -179,7 +175,6 @@ export default function Directory({ currentPath }: { currentPath: string }) {
               height={20}
               style={{
                 borderRadius: '4px',
-                cursor: 'pointer',
                 marginRight: '10px',
               }}
             />
