@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { ChevronRight, Home, ListTree, ChevronDown } from 'lucide-react'
 import mainIcon from '@/assets/favicon.ico'
 import { DownOutlined } from '@ant-design/icons'
@@ -12,10 +12,9 @@ import './share.css'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
 
-export default function Directory() {
+export default function Directory({ query }: { query: string }) {
   const router = useRouter()
   const currentPath = usePathname()
-  const query = useSearchParams().get('query')
   const [messageApi, contextHolder] = message.useMessage()
   const [bookDetail, setBookDetail] = useState<any>({
     icon: mainIcon,
@@ -50,7 +49,6 @@ export default function Directory() {
   const getArticleList = async () => {
     try {
       setIsLoading(true)
-      console.log(decodedQuery.current)
       const response = await fetch(`http://10.4.150.56:8029/article_tree/${decodedQuery.current.lid}/`, {
         method: 'GET',
         headers: {

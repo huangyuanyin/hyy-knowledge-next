@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { base64UrlDecode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
@@ -11,8 +11,7 @@ import { UserLoginForm } from '@/app/_components/form/user-login-form'
 import Link from 'next/link'
 // import { ChangeTheme } from '@/components/change-theme'
 
-export default function Header() {
-  const query = useSearchParams().get('query')
+export default function Header({ query }: { query: string }) {
   const path = usePathname()
   const [decodedQuery, setDecodedQuery] = useState<Query>({
     aname: '',
