@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Table, message, notification } from 'antd'
 import type { TableProps } from 'antd'
 import CopyToClipboard from '@uiw/react-copy-to-clipboard'
@@ -14,6 +14,7 @@ import './title.css'
 
 export default function TitlePage({ params, searchParams }: { params: { type: 'title' }; searchParams: { query: string } }) {
   const router = useRouter()
+  const path = useRef<string>('')
   const [api, contextHolder2] = notification.useNotification()
   const { query } = searchParams
   const decodedQuery = useRef<Query>({})
@@ -58,6 +59,7 @@ export default function TitlePage({ params, searchParams }: { params: { type: 't
 
   useEffect(() => {
     if (query) {
+      path.current = window.location.href
       const result = JSON.parse(base64UrlDecode(query))
       decodedQuery.current = result
     }
@@ -166,7 +168,7 @@ export default function TitlePage({ params, searchParams }: { params: { type: 't
             <Image src={articleType['title']} alt="" width={68} height={68} />
           </div>
           <CopyToClipboard
-            text={'dda'}
+            text={path.current}
             onClick={() => {
               api.success({
                 message: '复制成功',
