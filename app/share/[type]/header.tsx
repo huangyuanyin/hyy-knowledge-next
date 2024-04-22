@@ -28,7 +28,7 @@ export default function Header() {
       const result = JSON.parse(base64UrlDecode(query.current))
       setDecodedQuery(result)
     }
-  }, [window.location])
+  }, [query.current])
 
   const handleLoginSuccess = () => {
     window.location.reload()
