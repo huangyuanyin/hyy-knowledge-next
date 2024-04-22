@@ -2,19 +2,18 @@
 
 import { useEffect, useRef, useState, Suspense } from 'react'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { ChevronDown } from 'lucide-react'
 import { ConfigProvider, Tree, message } from 'antd'
 import type { TreeDataNode, TreeProps } from 'antd'
 import { ContentType, Query } from '@/type/index'
-import Icon from '@/assets/icons/1.svg'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 
-export default function BookIndex({ params }: { params: { type: ContentType } }) {
+export default function BookIndex({ params, searchParams }: { params: { type: ContentType }; searchParams: { query: string } }) {
   const router = useRouter()
-  const query =
-    useSearchParams().get('query') ||
-    'eyJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiI2MCIsImxuYW1lIjoi6Ieq5Yqo5YyW5rWL6K-V6YOoLeW8gOWPkUZBUSIsImdpZCI6IjciLCJnbmFtZSI6IuiHquWKqOWMlua1i-ivlemDqCJ9'
+  const {
+    query = 'eyJzaWQiOiIzIiwic25hbWUiOiLmtYvor5XkuK3lv4MiLCJsaWQiOiI2MCIsImxuYW1lIjoi6Ieq5Yqo5YyW5rWL6K-V6YOoLeW8gOWPkUZBUSIsImdpZCI6IjciLCJnbmFtZSI6IuiHquWKqOWMlua1i-ivlemDqCJ9',
+  } = searchParams
   const [messageApi, contextHolder] = message.useMessage()
   const [treeData, setTreeData] = useState<TreeDataNode[]>([])
   const [bookDetail, setBookDetail] = useState<any>({})
