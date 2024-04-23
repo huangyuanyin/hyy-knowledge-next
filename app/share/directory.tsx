@@ -24,7 +24,7 @@ export default function Directory() {
   const [selectedId, setSelectedId] = useState<Number | null>(null)
   const decodedQuery = useRef<Query>({})
   const [encodeQuery, setEncodeQuery] = useState<string>('')
-  const type = useRef<string>(currentPath.split('/')[currentPath.split('/').length - 1])
+  const type = useRef<string>(currentPath.split('/')[currentPath.split('/').length - 2])
 
   const [expandedKeys, setExpandedKeys] = useState<string[]>([])
 
@@ -44,18 +44,16 @@ export default function Directory() {
   useEffect(() => {
     getBookDetail()
     getArticleList()
-    type.current = currentPath.split('/')[currentPath.split('/').length - 1]
+    type.current = currentPath.split('/')[currentPath.split('/').length - 2]
   }, [currentPath])
 
   const getArticleList = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch(`http://10.4.150.56:8029/article_tree/${decodedQuery.current.lid}/`, {
+      const response = await fetch(`http://10.4.150.56:8029/docs_tree/${decodedQuery.current.lid}/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization:
-            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzOTMzODUyLCJpYXQiOjE3MTMzMjkwNTIsImp0aSI6IjY1NDc3MzFjMDJmYzRlYTRhYzJiNGJjNWQ1MjYwNDBhIiwidXNlcl9pZCI6ImJmOTAxYTAzN2ZlMDQ3MTViOTdiZThhYWVmY2U3ZDk4IiwidXNlcm5hbWUiOiJkb3V6ZyIsIm5pY2tuYW1lIjoiXHU3YWE2XHU1ZmQ3XHU1MjFhIiwiZW1haWwiOiJkb3V6Z0BpbmZvc2VjLmNvbS5jbiIsInJvbGVfbmFtZSI6Ilx1N2JhMVx1NzQwNlx1NTQ1OCIsInBvc3RfbmFtZSI6Ilx1NmQ0Ylx1OGJkNVx1NjAzYlx1NzZkMSIsImRlcHRfbmFtZSI6Ilx1NGVhN1x1NTRjMVx1NmQ0Ylx1OGJkNVx1NGUwMFx1OTBlOCJ9.br1Seva2v0elXPcLTtBlGlwuI-9jZPWBrVWLu_Aox_A',
         },
       })
       if (!response.ok) {
@@ -202,6 +200,8 @@ export default function Directory() {
               components: {
                 Tree: {
                   nodeHoverBg: '#eff0f0',
+                  nodeSelectedBg: '#eff0f0',
+                  directoryNodeSelectedBg: '#eff0f0',
                   directoryNodeSelectedColor: '#262626',
                   titleHeight: 34,
                 },
@@ -215,6 +215,7 @@ export default function Directory() {
                 const rotateStyle = expandedKeys.includes(props.id) ? { transform: 'rotate(360deg)' } : {}
                 return <ChevronDown className="h-[14px] w-[14px] text-[#585a5a] leading-6 transform -rotate-90" style={rotateStyle} />
               }}
+              selectedKeys={selectedId !== null ? [selectedId.toString()] : []}
               defaultExpandedKeys={selectedId !== null ? [selectedId.toString()] : []}
               defaultSelectedKeys={selectedId !== null ? [selectedId.toString()] : []} // 设置默认选中的节点
               fieldNames={{ title: 'title', key: 'id', children: 'children' }}

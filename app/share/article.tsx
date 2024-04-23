@@ -32,10 +32,10 @@ const iframeUrl: Record<ContentType, { src: string; opera?: string }> = {
   },
 }
 
-export default function ArticleDetail({ params }: { params: { type: ContentType } }) {
+export default function ArticleDetail({ params }: { params: { type: ContentType; query: string } }) {
   const path = usePathname()
   const [messageApi, contextHolder] = message.useMessage()
-  const { type } = params
+  const { type, query } = params
   const docValue = useRef<string>('')
   const [iframeSrc, setIframeSrc] = useState<string>('')
   const shareIframe = useRef<HTMLIFrameElement>(null)
@@ -44,7 +44,6 @@ export default function ArticleDetail({ params }: { params: { type: ContentType 
 
   useEffect(() => {
     if (path) {
-      const query = path.split('/')[path.split('/').length - 1]
       const decodedQuery = JSON.parse(base64UrlDecode(query))
       setEncodeQuery(decodedQuery)
     }
@@ -61,6 +60,7 @@ export default function ArticleDetail({ params }: { params: { type: ContentType 
   }, [docValue.current, type])
 
   const judegeType = () => {
+    console.log(params)
     if (['sheet', 'mind', 'ppt'].includes(type)) {
       setIframeSrc(`${iframeUrl[type].src}?time=${Date.now()}`)
     } else if (type === 'file') {

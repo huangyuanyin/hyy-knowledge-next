@@ -12,9 +12,10 @@ import { articleType } from '@/data/data'
 import shareIcon from '@/assets/icons/share.svg'
 import './title.css'
 
-export default function TitlePage({ params }: { params: { type: 'title' } }) {
+export default function TitlePage({ params }: { params: { type: 'title'; query: string } }) {
   const router = useRouter()
   const path = usePathname()
+  const { type, query } = params
   const [api, contextHolder2] = notification.useNotification()
   const decodedQuery = useRef<Query>({})
   const docValue = useRef<any>({})
@@ -58,7 +59,6 @@ export default function TitlePage({ params }: { params: { type: 'title' } }) {
 
   useEffect(() => {
     if (path) {
-      const query = path.split('/')[path.split('/').length - 1]
       const result = JSON.parse(base64UrlDecode(query))
       decodedQuery.current = result
     }
@@ -167,7 +167,7 @@ export default function TitlePage({ params }: { params: { type: 'title' } }) {
             <Image src={articleType['title']} alt="" width={68} height={68} />
           </div>
           <CopyToClipboard
-            text={path}
+            text={'http://10.4.150.55:4000' + path}
             onClick={() => {
               api.success({
                 message: '复制成功',
@@ -181,12 +181,16 @@ export default function TitlePage({ params }: { params: { type: 'title' } }) {
               分享
             </button>
           </CopyToClipboard>
-          <span className="leading-[24px] text-[#646973] text-[12px]">描述</span>
-          <span className="text-[14px] leading-[24px] text-[#8f959e]">
-            {docValue.current.description ? docValue.current.description : '暂无描述'}
-          </span>
-          <span className="text-[12px] text-[#646973] leading-[24px] mt-[12px]">所有者</span>
-          <span className="text-[14px] leading-[24px] text-[#1f2329]">{docValue.current.creator_name}</span>
+          {docValue.current && (
+            <>
+              <span className="leading-[24px] text-[#646973] text-[12px]">描述</span>
+              <span className="text-[14px] leading-[24px] text-[#8f959e]">
+                {docValue.current.description ? docValue.current.description : '暂无描述'}
+              </span>
+              <span className="text-[12px] text-[#646973] leading-[24px] mt-[12px]">所有者</span>
+              <span className="text-[14px] leading-[24px] text-[#1f2329]">{docValue.current.creator_name}</span>
+            </>
+          )}
         </div>
       </div>
     </>

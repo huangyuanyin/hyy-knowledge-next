@@ -1,16 +1,20 @@
 'use client'
 
-import { use, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import './tinymce.css'
+import { zoomImage } from '@/utils/util'
+import _ from 'lodash'
 
 const initOptions = {
   skin_url: '/tinymce/skins/ui/oxide',
   content_style: `
-    body { margin: 4rem; }
+    body { margin: 4rem;caret-color: transparent; }
     .mce-toc { border:0px ;right: 8%;min-width: 250px;top:20px }
-    .mce-content-body [contentEditable=false][data-mce-selected] { outline:0px }
-    .mce-content-body {width:60%}
+    .mce-content-body  [data-mce-selected] { outline:0px }
+    .mce-content-body {width:calc(100% - 29vw)}
+      img{max-width:100% !important;cursor:pointer !important;}
+    table{max-width:100%;}
   `, // 设置内容样式
   with: '100px',
   height: 'calc(100vh - 52px)',
@@ -89,9 +93,12 @@ const initOptions = {
   paste_word_inline_styles: false, // 粘贴时的内联样式
   paste_word_tab_interval: 0, // 粘贴时的间隔
   skeletonScreen: true,
-  quickbars_image_toolbar: 'alignleft aligncenter alignright | rotateleft rotateright | imageoptions',
-  quickbars_selection_toolbar: 'bold italic underline quicklink h2 h3 blockquote quickimage quicktable tablemergecells',
-  quickbars_insert_toolbar: 'p h2 h3 bullist numlist quickimage quicktable hr',
+  // quickbars_image_toolbar: 'alignleft aligncenter alignright | rotateleft rotateright | imageoptions',
+  // quickbars_selection_toolbar: 'bold italic underline quicklink h2 h3 blockquote quickimage quicktable tablemergecells',
+  // quickbars_insert_toolbar: 'p h2 h3 bullist numlist quickimage quicktable hr',
+  quickbars_image_toolbar: '',
+  quickbars_selection_toolbar: '',
+  quickbars_insert_toolbar: '',
   formats: {
     formatpainter_checklist: { selector: 'ul', classes: 'tox-checklist' },
     formatpainter_liststyletype: { selector: 'ul,ol', styles: { listStyleType: '%value' } },
@@ -136,8 +143,20 @@ const initOptions = {
       editor.execCommand('mceInsertOrUpdateToc')
     })
     editor.on('init', () => {
+      const tables = editor.dom.select('table')
+      tables.forEach(function (table: any) {
+        editor.dom.setAttrib(table, 'contenteditable', 'false')
+      })
       editor.execCommand('mceInsertOrUpdateToc')
     })
+    const debouncedHandleSelectionChange = _.debounce(() => {
+      const selectedElement = editor.selection.getNode()
+      if (selectedElement.nodeName === 'IMG') {
+        const imageUrl = selectedElement.getAttribute('src')
+        zoomImage(imageUrl)
+      }
+    }, 300) // 设置防抖延迟时间为300毫秒
+    editor.on('selectionchange', debouncedHandleSelectionChange)
   },
 }
 
@@ -162,7 +181,7 @@ export default function Tinymce(props: { value: string }) {
   return (
     <div className="w-full relative">
       <div id="sample" className="TinyMCE_wrap">
-        <Editor tinymceScriptSrc={tinymceScriptSrc} onInit={handleEditorInit} value={value} init={initOptions as any} disabled={true} />
+        <Editor tinymceScriptSrc={tinymceScriptSrc} onInit={handleEditorInit} value={value} init={initOptions as any} />
         <div
           id="outside-toc"
           className="outside-toc absolute top-[101px] right-[15px] w-[300px] h-[calc(100% - 140px)] overflow-y-auto p-[10px] z-200 bg-white"

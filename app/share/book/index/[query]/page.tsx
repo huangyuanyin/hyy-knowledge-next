@@ -9,9 +9,10 @@ import type { TreeDataNode, TreeProps } from 'antd'
 import { ContentType, Query } from '@/type/index'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 
-export default function BookIndex({ params }: { params: { type: ContentType } }) {
+export default function BookIndex({ params }: { params: { type: ContentType; query: string } }) {
   const router = useRouter()
   const path = usePathname()
+  const { query } = params
   const [messageApi, contextHolder] = message.useMessage()
   const [treeData, setTreeData] = useState<TreeDataNode[]>([])
   const [bookDetail, setBookDetail] = useState<any>({})
@@ -25,9 +26,7 @@ export default function BookIndex({ params }: { params: { type: ContentType } })
   }
 
   useEffect(() => {
-    console.log(path)
     if (path) {
-      const query = path.split('/')[path.split('/').length - 1]
       const result = JSON.parse(base64UrlDecode(query))
       decodedQuery.current = result
     }
