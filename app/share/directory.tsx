@@ -11,6 +11,8 @@ import type { TreeDataNode, TreeProps } from 'antd'
 import './share.css'
 import { base64UrlDecode, base64UrlEncode } from '@/utils/encrypt'
 import { Query } from '@/type/index'
+import Loading from '@/components/loading'
+import Empty from '@/components/empty'
 
 export default function Directory() {
   const router = useRouter()
@@ -43,9 +45,12 @@ export default function Directory() {
 
   useEffect(() => {
     getBookDetail()
-    getArticleList()
     type.current = currentPath.split('/')[currentPath.split('/').length - 2]
   }, [currentPath])
+
+  useEffect(() => {
+    getArticleList()
+  }, [])
 
   const getArticleList = async () => {
     try {
@@ -88,7 +93,6 @@ export default function Directory() {
       },
     })
     if (!response.ok) {
-      setIsLoading(false)
       switch (response.status) {
         case 404:
           messageApi.error('知识库不存在')
@@ -99,7 +103,6 @@ export default function Directory() {
       throw new Error('网络请求失败')
     }
     const res = await response.json()
-    setIsLoading(false)
     const { code, data, msg } = res
     if (code === 1000) {
       setBookDetail(data)
@@ -194,44 +197,50 @@ export default function Directory() {
           </div>
         </div>
 
-        <div className="articleTree px-[8px] w-full mt-[6px] flex-1 overflow-y-auto h-[calc(100%-190px)]">
-          <ConfigProvider
-            theme={{
-              components: {
-                Tree: {
-                  nodeHoverBg: '#eff0f0',
-                  nodeSelectedBg: '#eff0f0',
-                  directoryNodeSelectedBg: '#eff0f0',
-                  directoryNodeSelectedColor: '#262626',
-                  titleHeight: 34,
+        {isLoading ? (
+          <Loading text="目录加载中..." height="50vh" />
+        ) : !treeData.length ? (
+          <Empty height="40vh" />
+        ) : (
+          <div className="articleTree px-[8px] w-full mt-[6px] flex-1 overflow-y-auto h-[calc(100%-190px)] overflow-x-hidden">
+            <ConfigProvider
+              theme={{
+                components: {
+                  Tree: {
+                    nodeHoverBg: '#eff0f0',
+                    nodeSelectedBg: '#eff0f0',
+                    directoryNodeSelectedBg: '#eff0f0',
+                    directoryNodeSelectedColor: '#262626',
+                    titleHeight: 34,
+                  },
                 },
-              },
-            }}
-          >
-            <Tree
-              autoExpandParent
-              blockNode
-              switcherIcon={(props: any) => {
-                const rotateStyle = expandedKeys.includes(props.id) ? { transform: 'rotate(360deg)' } : {}
-                return <ChevronDown className="h-[14px] w-[14px] text-[#585a5a] leading-6 transform -rotate-90" style={rotateStyle} />
               }}
-              selectedKeys={selectedId !== null ? [selectedId.toString()] : []}
-              defaultExpandedKeys={selectedId !== null ? [selectedId.toString()] : []}
-              defaultSelectedKeys={selectedId !== null ? [selectedId.toString()] : []} // 设置默认选中的节点
-              fieldNames={{ title: 'title', key: 'id', children: 'children' }}
-              treeData={treeData}
-              titleRender={(node: any) => (
-                <div className="flex items-center w-full">
-                  <p className={`text-sm text-[#262626]  truncate w-full leading-[34px] ${selectedId === node.id ? 'font-bold' : ''}`}>
-                    {node.title}
-                  </p>
-                </div>
-              )}
-              onSelect={handleSelect}
-              onExpand={onExpand}
-            />
-          </ConfigProvider>
-        </div>
+            >
+              <Tree
+                autoExpandParent
+                blockNode
+                switcherIcon={(props: any) => {
+                  const rotateStyle = expandedKeys.includes(props.id) ? { transform: 'rotate(360deg)' } : {}
+                  return <ChevronDown className="h-[14px] w-[14px] text-[#585a5a] leading-6 transform -rotate-90" style={rotateStyle} />
+                }}
+                selectedKeys={selectedId !== null ? [selectedId.toString()] : []}
+                defaultExpandedKeys={selectedId !== null ? [selectedId.toString()] : []}
+                defaultSelectedKeys={selectedId !== null ? [selectedId.toString()] : []} // 设置默认选中的节点
+                fieldNames={{ title: 'title', key: 'id', children: 'children' }}
+                treeData={treeData}
+                titleRender={(node: any) => (
+                  <div className="flex items-center w-full">
+                    <p className={`text-sm text-[#262626]  truncate w-full leading-[34px] ${selectedId === node.id ? 'font-bold' : ''}`}>
+                      {node.title}
+                    </p>
+                  </div>
+                )}
+                onSelect={handleSelect}
+                onExpand={onExpand}
+              />
+            </ConfigProvider>
+          </div>
+        )}
       </div>
     </>
   )

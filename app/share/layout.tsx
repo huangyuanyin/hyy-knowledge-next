@@ -9,16 +9,16 @@ import Directory from './directory'
 const ShareLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
 
-  useEffect(() => {
-    window.location.search
-  }, [])
-
   return (
     <ResizablePanelGroup direction="horizontal" className="max-w-[100vw] rounded-lg">
-      <ResizablePanel defaultSize={15} maxSize={15} minSize={10}>
-        <Directory />
-      </ResizablePanel>
-      <ResizableHandle withHandle />
+      {pathname.includes('/share/book/') && (
+        <>
+          <ResizablePanel defaultSize={15} maxSize={15} minSize={10}>
+            <Directory />
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+        </>
+      )}
       <ResizablePanel defaultSize={85}>
         <div className="min-h-[100vh] max-w-[100vw] flex flex-col h-[100vh] overflow-auto">
           {pathname.includes('/share/book/index') ? null : <Header />}

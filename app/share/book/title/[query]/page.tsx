@@ -11,6 +11,7 @@ import { Query } from '@/type/index'
 import { articleType } from '@/data/data'
 import shareIcon from '@/assets/icons/share.svg'
 import './title.css'
+import Empty from '@/components/empty'
 
 export default function TitlePage({ params }: { params: { type: 'title'; query: string } }) {
   const router = useRouter()
@@ -137,29 +138,33 @@ export default function TitlePage({ params }: { params: { type: 'title'; query: 
       {contextHolder2}
       <div className="flex">
         <div className="flex-1 px-[24px] pt-[24px]">
-          <Table
-            columns={columns}
-            dataSource={titleList}
-            pagination={false}
-            scroll={{ y: '80vh' }}
-            expandable={{
-              expandIcon: ({ expanded, onExpand, record }) => {
-                return null
-              },
-            }}
-            onRow={(record) => ({
-              onClick: () => {
-                const query = {
-                  lid: decodedQuery.current.lid,
-                  lname: decodedQuery.current.lname,
-                  aid: record.id,
-                  aname: record.title,
-                }
-                const hash = base64UrlEncode(JSON.stringify(query))
-                router.push(`/share/book/${record.type}/${hash}`)
-              },
-            })}
-          />
+          {!titleList.length ? (
+            <Empty text="该分组下暂无内容" />
+          ) : (
+            <Table
+              columns={columns}
+              dataSource={titleList}
+              pagination={false}
+              scroll={{ y: '80vh' }}
+              expandable={{
+                expandIcon: ({ expanded, onExpand, record }) => {
+                  return null
+                },
+              }}
+              onRow={(record) => ({
+                onClick: () => {
+                  const query = {
+                    lid: decodedQuery.current.lid,
+                    lname: decodedQuery.current.lname,
+                    aid: record.id,
+                    aname: record.title,
+                  }
+                  const hash = base64UrlEncode(JSON.stringify(query))
+                  router.push(`/share/book/${record.type}/${hash}`)
+                },
+              })}
+            />
+          )}
         </div>
         <div className="w-[232px] ml-[24px] bt-[12px] mr-[18px] flex flex-col">
           <div className="mt-[8px]">{decodedQuery.current.aname}</div>

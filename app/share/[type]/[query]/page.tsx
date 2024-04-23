@@ -32,11 +32,11 @@ const iframeUrl: Record<ContentType, { src: string; opera?: string }> = {
   },
 }
 
-export default function DocSharePage({ params, searchParams }: { params: { type: ContentType }; searchParams: { query: string } }) {
+export default function DocSharePage({ params }: { params: { type: ContentType; query: string } }) {
   const [messageApi, contextHolder] = message.useMessage()
-  const { type } = params
+  const { type, query } = params
   const docValue = useRef<string>('')
-  const [query, setQuery] = useState<Query>({
+  const [decodedQuery, setDecodedQuery] = useState<Query>({
     aid: '',
   })
   const [iframeSrc, setIframeSrc] = useState<string>('')
@@ -44,17 +44,17 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    if (searchParams.query) {
-      const decodedQuery = JSON.parse(base64UrlDecode(searchParams.query))
-      setQuery(decodedQuery)
+    if (query) {
+      const decodedQuery = JSON.parse(base64UrlDecode(query))
+      setDecodedQuery(decodedQuery)
     }
-  }, [searchParams.query])
+  }, [query])
 
   useEffect(() => {
-    if (query.aid) {
+    if (decodedQuery.aid) {
       getArticle()
     }
-  }, [query.aid, type])
+  }, [decodedQuery.aid, type])
 
   useEffect(() => {
     judegeType()
@@ -72,7 +72,7 @@ export default function DocSharePage({ params, searchParams }: { params: { type:
   const getArticle = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch(`http://10.4.150.56:8029/public_data/${query.aid}/`, {
+      const response = await fetch(`http://10.4.150.56:8029/public_data/${decodedQuery.aid}/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

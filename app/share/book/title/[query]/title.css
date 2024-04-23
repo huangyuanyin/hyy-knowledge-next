@@ -1,3 +1,7 @@
 .ant-table-row{
   cursor: pointer !important;
 }
+
+.luckysheet-input-box{
+  display: none !important;
+}
