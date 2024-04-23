@@ -183,7 +183,7 @@ export default function Directory() {
         </div>
         <div className="flex flex-col">
           <div
-            className={`h-[32px] flex items-center cursor-pointer relative py-[5px] px-[8px] mx-[8px] mt-[10px] rounded-md ${
+            className={`h-[32px] flex items-center cursor-pointer relative py-[5px] px-[8px] mx-[8px] mt-[10px] rounded-md hover:bg-[#eff0f0] ${
               type.current === 'index' ? 'bg-[#eff0f0]' : ''
             }`}
             onClick={() => toUrl('index')}
