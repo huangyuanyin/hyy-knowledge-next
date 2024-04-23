@@ -113,7 +113,16 @@ export default function BookIndex({ params }: { params: { type: ContentType; que
   return (
     <>
       {contextHolder}
-      <div className="px-[32px] pt-[64px] relative bg-[#fafafa]">
+      <div
+        className="px-[32px] pt-[64px] relative bg-[#fafafa]"
+        style={{
+          ...(bookDetail.cover
+            ? {
+                background: `linear-gradient(rgba(255, 255, 255, 0) 0px, rgb(255, 255, 255) 70vh, rgb(255, 255, 255) 100%), url(${bookDetail.cover}) center top/100% no-repeat`,
+              }
+            : {}),
+        }}
+      >
         <div className="max-w-[1024px] bg-white p-[32px] min-h-[calc(100vh-64px)] rounded-2xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -156,7 +165,7 @@ export default function BookIndex({ params }: { params: { type: ContentType; que
                 blockNode
                 switcherIcon={(props: any) => {
                   const rotateStyle = expandedKeys.includes(props.id) ? { transform: 'rotate(360deg)' } : {}
-                  return <ChevronDown className="h-[14px] w-[14px] text-[#585a5a] leading-6 transform -rotate-90" style={rotateStyle} />
+                  return <ChevronDown className="h-[13px] w-[13px] text-[#585a5a] leading-6 transform -rotate-90" style={rotateStyle} />
                 }}
                 fieldNames={{ title: 'title', key: 'id', children: 'children' }}
                 treeData={treeData}
