@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Base64 } from 'js-base64'
 import { message } from 'antd'
 import Tinymce from '@/app/_components/tinymce/tinymce'
+import Markdown from '@/app/_components/markdown/markdown'
 import { base64UrlDecode } from '@/utils/encrypt'
 import { ContentType, Query } from '@/type/index'
 import Loading from '@/components/loading'
@@ -36,6 +37,7 @@ export default function DocSharePage({ params }: { params: { type: ContentType; 
   const [messageApi, contextHolder] = message.useMessage()
   const { type, query } = params
   const docValue = useRef<string>('')
+  const pluginkey = useRef<string>('')
   const [decodedQuery, setDecodedQuery] = useState<Query>({
     aid: '',
   })
@@ -100,6 +102,7 @@ export default function DocSharePage({ params }: { params: { type: ContentType; 
       const { code, data, msg } = res
       if (code === 1000) {
         docValue.current = data.body
+        pluginkey.current = data.pluginkey
         if (type === 'file') return judegeType()
         sendMessageToIframe()
       } else {
@@ -146,7 +149,11 @@ export default function DocSharePage({ params }: { params: { type: ContentType; 
         </div>
       ) : !isLoading ? (
         type === 'doc' ? (
-          <Tinymce value={docValue.current} />
+          pluginkey.current === 'tinymce' ? (
+            <Tinymce value={docValue.current} />
+          ) : (
+            <Markdown value={docValue.current} />
+          )
         ) : (
           <LuckySheetEdtior content={docValue.current || sheetData} />
         )

@@ -1,0 +1,8 @@
+.custom-md-editor .w-md-editor {
+  border: none; /* 去掉边框 */
+  box-shadow: none; /* 去掉阴影 */
+}
+
+.custom-md-editor{
+  flex: 1;
+}
