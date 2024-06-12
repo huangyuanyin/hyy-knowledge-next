@@ -17,22 +17,22 @@ export default function LuckySheetEdtior(props: IProps) {
   useEffect(() => {
     const linkElement1 = document.createElement('link')
     linkElement1.rel = 'stylesheet'
-    linkElement1.href = 'https://cdn.jsdelivr.net/npm/luckysheet/dist/plugins/css/pluginsCss.css'
+    linkElement1.href = 'http://10.4.150.55:8080/knowledge/excel/plugins/css/pluginsCss.css'
     document.head.appendChild(linkElement1)
 
     const linkElement2 = document.createElement('link')
     linkElement2.rel = 'stylesheet'
-    linkElement2.href = 'https://cdn.jsdelivr.net/npm/luckysheet/dist/plugins/plugins.css'
+    linkElement2.href = 'http://10.4.150.55:8080/knowledge/excel/plugins/plugins.css'
     document.head.appendChild(linkElement2)
 
     const linkElement3 = document.createElement('link')
     linkElement3.rel = 'stylesheet'
-    linkElement3.href = 'https://cdn.jsdelivr.net/npm/luckysheet/dist/css/luckysheet.css'
+    linkElement3.href = 'http://10.4.150.55:8080/knowledge/excel/css/luckysheet.css'
     document.head.appendChild(linkElement3)
 
     const linkElement4 = document.createElement('link')
     linkElement4.rel = 'stylesheet'
-    linkElement4.href = 'https://cdn.jsdelivr.net/npm/luckysheet/dist/assets/iconfont/iconfont.css'
+    linkElement4.href = 'http://10.4.150.55:8080/knowledge/excel/assets/iconfont/iconfont.css'
     document.head.appendChild(linkElement4)
 
     // Add cleanup function to remove the link elements when the component unmounts
@@ -47,7 +47,7 @@ export default function LuckySheetEdtior(props: IProps) {
   useEffect(() => {
     // Load plugin.js script
     const scriptElement1 = document.createElement('script')
-    scriptElement1.src = 'https://cdn.jsdelivr.net/npm/luckysheet/dist/plugins/js/plugin.js'
+    scriptElement1.src = 'http://10.4.150.55:8080/knowledge/excel/plugins/js/plugin.js'
     scriptElement1.type = 'text/javascript'
     scriptElement1.onload = () => {
       if (!script1Loaded.current) {
@@ -55,7 +55,7 @@ export default function LuckySheetEdtior(props: IProps) {
         script1Loaded.current = true
         console.log('plugin.js loaded')
         const scriptElement2 = document.createElement('script')
-        scriptElement2.src = 'https://cdn.jsdelivr.net/npm/luckysheet/dist/luckysheet.umd.js'
+        scriptElement2.src = 'http://10.4.150.55:8080/knowledge/excel/luckysheet.umd.js'
         scriptElement2.type = 'text/javascript'
         scriptElement2.onload = () => {
           if (!script2Loaded.current) {
