@@ -17,7 +17,7 @@ export default function LuckySheetEdtior(props: IProps) {
   useEffect(() => {
     const linkElement1 = document.createElement('link')
     linkElement1.rel = 'stylesheet'
-    linkElement1.href = 'http://10.4.150.55:8080/knowledge/excel/plugins/css/pluginsCss.css'
+    linkElement1.href = '../../assets/excel/plugins/plugins.css'
     document.head.appendChild(linkElement1)
 
     const linkElement2 = document.createElement('link')
@@ -35,12 +35,18 @@ export default function LuckySheetEdtior(props: IProps) {
     linkElement4.href = 'http://10.4.150.55:8080/knowledge/excel/assets/iconfont/iconfont.css'
     document.head.appendChild(linkElement4)
 
+    const linkElement5 = document.createElement('link')
+    linkElement5.rel = 'stylesheet'
+    linkElement5.href = 'https://cdn.jsdelivr.net/npm/luckysheet/dist/plugins/plugins.css'
+    document.head.appendChild(linkElement5)
+
     // Add cleanup function to remove the link elements when the component unmounts
     return () => {
       document.head.removeChild(linkElement1)
       document.head.removeChild(linkElement2)
       document.head.removeChild(linkElement3)
       document.head.removeChild(linkElement4)
+      document.head.removeChild(linkElement5)
     }
   }, [])
 
