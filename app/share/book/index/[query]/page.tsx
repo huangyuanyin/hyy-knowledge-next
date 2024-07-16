@@ -93,6 +93,7 @@ export default function BookIndex({ params }: { params: { type: ContentType; que
     setIsLoading(false)
     const { code, data, msg } = res
     if (code === 1000) {
+      console.log(data)
       setBookDetail(data)
     } else {
       messageApi.error(msg)
@@ -135,7 +136,7 @@ export default function BookIndex({ params }: { params: { type: ContentType; que
                   borderRadius: '4px',
                 }}
               />
-              <span className="text-[28px] font-bold ml-[18px] text-[#262626]">信安更新日志</span>
+              <span className="text-[28px] font-bold ml-[18px] text-[#262626]">{bookDetail.name}</span>
             </div>
             <div></div>
           </div>

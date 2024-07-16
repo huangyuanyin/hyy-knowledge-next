@@ -178,8 +178,8 @@ export default function Directory() {
     <>
       {contextHolder}
       <div className="h-[100vh] w-full flex flex-col">
-        {/* <div className="mx-[10px] pb-[12px] border-b border-[rgba(0,0,0,0.04)]">
-          <div className="flex items-center w-full h-[45px] pt-[16px] pb-[6px] pl-[6px]">
+        <div className="mt-[10px] mx-[10px] pb-[12px] border-b border-[rgba(0,0,0,0.04)]">
+          {/* <div className="flex items-center w-full h-[45px] pt-[16px] pb-[6px] pl-[6px]">
             <a
               href={`http://10.4.150.55:8080/knowledge/#/dashboard`}
               target="_blank"
@@ -199,7 +199,7 @@ export default function Directory() {
               <ChevronRight className="h-[14px] w-[14px] mx-[2px]" />
               <span className="text-xs cursor-pointer text-[#8a8f8d]">信安知识库</span>
             </a>
-          </div>
+          </div> */}
           <div className="flex items-center w-full flex-1 ml-[4px] h-[36px]">
             <Image
               src={bookDetail.icon}
@@ -213,7 +213,7 @@ export default function Directory() {
             />
             <span className="text-base text-[#262626] font-bold">{decodedQuery.current.lname}</span>
           </div>
-        </div> */}
+        </div>
         <div className="flex flex-col">
           <div
             className={`h-[32px] flex items-center cursor-pointer relative py-[5px] px-[8px] mx-[8px] mt-[10px] rounded-md hover:bg-[#eff0f0] ${
